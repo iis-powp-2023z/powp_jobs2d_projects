@@ -1,20 +1,23 @@
 package edu.kis.powp.jobs2d.events;
 
 import edu.kis.powp.jobs2d.command.ComplexCommandFactory;
+import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.command.manager.DriverCommandManager;
 import edu.kis.powp.jobs2d.drivers.DriverManager;
+import edu.kis.powp.jobs2d.features.CommandsFeature;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectTestTriangle2OptionListener implements ActionListener {
-    private DriverManager driverManager;
-
-    public SelectTestTriangle2OptionListener(DriverManager driverManager) {
-        this.driverManager = driverManager;
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ComplexCommandFactory.getTriangle().execute(driverManager.getCurrentDriver());
+        List<DriverCommand> commands = new ArrayList<DriverCommand>();
+        commands.add(ComplexCommandFactory.getTriangle());
+        DriverCommandManager manager = CommandsFeature.getDriverCommandManager();
+        manager.setCurrentCommand(commands, "getTriangle");
     }
 }

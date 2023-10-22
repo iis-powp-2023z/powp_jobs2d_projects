@@ -30,15 +30,11 @@ public class TestJobs2dApp {
                 DriverFeature.getDriverManager());
         SelectTestFigure2OptionListener selectTestFigure2OptionListener = new SelectTestFigure2OptionListener(
                 DriverFeature.getDriverManager());
-        SelectTestTriangle2OptionListener selectTestTriangle2OptionListener = new SelectTestTriangle2OptionListener(
-                DriverFeature.getDriverManager());
-        SelectTestRectangle2OptionListener selectTestRectangle2OptionListener = new SelectTestRectangle2OptionListener(
-                DriverFeature.getDriverManager());
+
 
         application.addTest("Figure Joe 1", selectTestFigureOptionListener);
         application.addTest("Figure Joe 2", selectTestFigure2OptionListener);
-        application.addTest("Triangle", selectTestTriangle2OptionListener);
-        application.addTest("Rectangle", selectTestRectangle2OptionListener);
+
     }
 
     /**
@@ -48,6 +44,8 @@ public class TestJobs2dApp {
      */
     private static void setupCommandTests(Application application) {
         application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
+        application.addTest("Load Triangle", new SelectTestTriangle2OptionListener());
+        application.addTest("Load Rectangle",  new SelectTestRectangle2OptionListener());
 
         application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
