@@ -2,6 +2,7 @@ package edu.kis.powp.jobs2d;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +13,7 @@ import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
 import edu.kis.powp.jobs2d.drivers.PreciseLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
+import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.events.SelectLoadSecretCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectTestFigure2OptionListener;
@@ -61,6 +63,14 @@ public class TestJobs2dApp {
 
         Job2dDriver preciousLoggerDriver = new PreciseLoggerDriver();
         DriverFeature.addDriver("Precise logger driver", preciousLoggerDriver);
+
+        Job2dDriver driverContainer = new DriverContainer(
+                Arrays.asList(
+                        new PreciseLoggerDriver(),
+                        new LineDriverAdapter(DrawerFeature.getDrawerController(), LineFactory.getBasicLine(), "basic")
+                )
+        );
+        DriverFeature.addDriver("Precise Logger + Line Drawer", driverContainer);
 
         DrawPanelController drawerController = DrawerFeature.getDrawerController();
         Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
