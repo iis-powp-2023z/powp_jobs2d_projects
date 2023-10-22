@@ -1,6 +1,6 @@
 package edu.kis.powp.jobs2d.events;
 
-import edu.kis.legacy.drawer.panel.DefaultDrawerFrame;
+import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.Job2dDriver;
 
 import java.awt.*;
@@ -9,17 +9,18 @@ import java.awt.event.MouseListener;
 
 public class LeftMouseClickListener implements MouseListener {
 
+    private Application application;
     private final Job2dDriver driver;
 
-
-    public LeftMouseClickListener(Job2dDriver driver) {
+    public LeftMouseClickListener(Application application, Job2dDriver driver) {
+        this.application = application;
         this.driver = driver;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        int width = DefaultDrawerFrame.getDefaultDrawerFrame().getDrawArea().getHeight();
-        int height = DefaultDrawerFrame.getDefaultDrawerFrame().getDrawArea().getWidth();
+        int width = application.getFreePanel().getWidth();
+        int height = application.getFreePanel().getHeight();
 
         if (e.getButton() == MouseEvent.BUTTON3) {
             Point point = e.getPoint();
