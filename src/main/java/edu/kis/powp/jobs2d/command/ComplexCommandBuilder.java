@@ -9,7 +9,7 @@ public class ComplexCommandBuilder {
         complexCommandList.add(driverCommand);
         return this;
     }
-    public ComplexCommand build() {
-        return new ComplexCommand(complexCommandList);
+    public ComplexCommand build(String name) {
+        return new ComplexCommand(complexCommandList, name);
     }
 }

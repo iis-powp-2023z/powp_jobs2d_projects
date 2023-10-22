@@ -14,9 +14,7 @@ public class SelectTestTriangle2OptionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        List<DriverCommand> commands = new ArrayList<DriverCommand>();
-        commands.add(ComplexCommandFactory.getTriangle());
         CommandManager manager = CommandsFeature.getDriverCommandManager();
-        manager.setCurrentCommand(commands, "getTriangle");
+        manager.setCurrentCommand(ComplexCommandFactory.getTriangle());
     }
 }

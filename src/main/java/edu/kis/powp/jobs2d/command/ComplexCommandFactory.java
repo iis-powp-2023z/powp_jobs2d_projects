@@ -10,7 +10,7 @@ public class ComplexCommandFactory {
                 .addCommand(new OperateToCommand(100, 50))
                 .addCommand(new OperateToCommand(-100, 50))
                 .addCommand(new OperateToCommand(-100, -50))
-                .build();
+                .build("getRectangle");
     }
     public static DriverCommand getTriangle() {
         return new ComplexCommandBuilder()
@@ -18,6 +18,6 @@ public class ComplexCommandFactory {
                 .addCommand(new OperateToCommand(-100, 100))
                 .addCommand(new OperateToCommand(50, -100))
                 .addCommand(new OperateToCommand(-100, -100))
-                .build();
+                .build("getTriangle");
     }
 }
