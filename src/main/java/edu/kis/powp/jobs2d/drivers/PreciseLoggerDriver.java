@@ -4,11 +4,11 @@ import edu.kis.powp.jobs2d.Job2dDriver;
 
 import java.util.logging.Logger;
 
-public class PreciousLoggerDriver implements Job2dDriver {
+public class PreciseLoggerDriver implements Job2dDriver {
     private int counter;
     Logger logger = Logger.getLogger("global");
 
-    public PreciousLoggerDriver() {
+    public PreciseLoggerDriver() {
         this.counter = 1;
     }
 
@@ -29,6 +29,6 @@ public class PreciousLoggerDriver implements Job2dDriver {
     }
 
     public String toString() {
-        return "Precious Logger driver";
+        return "Precise Logger driver";
     }
 }
