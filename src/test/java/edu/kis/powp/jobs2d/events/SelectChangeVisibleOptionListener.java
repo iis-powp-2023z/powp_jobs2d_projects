@@ -8,7 +8,7 @@ public class SelectChangeVisibleOptionListener implements ActionListener {
 	private Window controlledWindow;
 
 	public SelectChangeVisibleOptionListener(Window controlledWindow) {
-		super();
+    super();
 		this.controlledWindow = controlledWindow;
 	}
 
