@@ -25,12 +25,15 @@ public class LineDriverAdapter implements Job2dDriver {
     public void setPosition(int x, int y) {
         this.startX = x;
         this.startY = y;
+        System.out.println("driver::Position set to: " + x + ", " + y);
     }
 
     @Override
     public void operateTo(int x, int y) {
         line.setStartCoordinates(this.startX, this.startY);
+        System.out.println("Line start: " + this.startX + ", " + this.startY);
         this.setPosition(x, y);
+        System.out.println("Line end: " + x + ", " + y);
         line.setEndCoordinates(x, y);
 
         drawController.drawLine(line);
