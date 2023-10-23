@@ -1,5 +1,6 @@
 package edu.kis.powp.jobs2d.command.manager;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,6 +46,17 @@ public class CommandManager {
             @Override
             public Iterator<DriverCommand> iterator() {
                 return driverCommands.iterator();
+            }
+
+            @Override
+            public ICompoundCommand clone() {
+                ICompoundCommand compoundCommand = null;
+                try {
+                    compoundCommand = (ICompoundCommand) super.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+                return compoundCommand;
             }
 
             @Override
