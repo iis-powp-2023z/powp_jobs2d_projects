@@ -11,6 +11,7 @@ import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
 import edu.kis.powp.jobs2d.drivers.PreciseLoggerDriver;
+import edu.kis.powp.jobs2d.drivers.TransformingDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.events.SelectLoadSecretCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
@@ -63,12 +64,24 @@ public class TestJobs2dApp {
         DriverFeature.addDriver("Precise logger driver", preciousLoggerDriver);
 
         DrawPanelController drawerController = DrawerFeature.getDrawerController();
-        Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
-        DriverFeature.addDriver("Line Simulator", driver);
-        DriverFeature.getDriverManager().setCurrentDriver(driver);
 
-        driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
-        DriverFeature.addDriver("Special line Simulator", driver);
+        // Common transformation for Line Simulator and Special Line Simulator
+        TransformingDriver commonTransformedDriver = new TransformingDriver(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
+        commonTransformedDriver.scale(0.5, 0.4);
+        commonTransformedDriver.rotate(45);
+        //commonTransformedDriver.flip();
+
+        // Line Simulator
+        DriverFeature.addDriver("Line Simulator", commonTransformedDriver);
+        DriverFeature.getDriverManager().setCurrentDriver(commonTransformedDriver);
+
+        // Special Line Simulator
+        commonTransformedDriver = new TransformingDriver(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
+        commonTransformedDriver.scale(0.5, 0.25);
+        commonTransformedDriver.rotate(88);
+        //commonTransformedDriver.flip();
+        DriverFeature.addDriver("Special Line Simulator", commonTransformedDriver);
+
         DriverFeature.updateDriverInfo();
     }
 
