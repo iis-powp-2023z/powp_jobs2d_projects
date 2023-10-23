@@ -11,6 +11,8 @@ public class TransformingDriver implements Job2dDriver {
     private double scaleY;
     private double rotationAngle;
     private boolean isFlipped;
+    private int offsetX;
+    private int offsetY;
 
     public TransformingDriver(Job2dDriver driver) {
         this.driver = driver;
@@ -18,6 +20,8 @@ public class TransformingDriver implements Job2dDriver {
         scaleY = 1.0;
         rotationAngle = 0.0;
         isFlipped = false;
+        offsetX = 0;
+        offsetY = 0;
     }
 
     @Override
@@ -45,16 +49,39 @@ public class TransformingDriver implements Job2dDriver {
         isFlipped = !isFlipped;
     }
 
+    public void moveDown(int offset) {
+        offsetY += offset;
+    }
+
+    public void moveUp(int offset) {
+        offsetY -= offset;
+    }
+
+    public void moveLeft(int offset) {
+        offsetX -= offset;
+    }
+
+    public void moveRight(int offset) {
+        offsetX += offset;
+    }
+
     private int[] transformCoordinates(int x, int y) {
         int transformedX = (int) (x * scaleX);
         int transformedY = (int) (y * scaleY);
+
         double cos = Math.cos(Math.toRadians(rotationAngle));
         double sin = Math.sin(Math.toRadians(rotationAngle));
+
         int rotatedX = (int) (transformedX * cos - transformedY * sin);
         int rotatedY = (int) (transformedX * sin + transformedY * cos);
+
         if (isFlipped) {
             rotatedX = -rotatedX;
         }
+
+        rotatedX += offsetX;
+        rotatedY += offsetY;
+
         return new int[]{rotatedX, rotatedY};
     }
 }

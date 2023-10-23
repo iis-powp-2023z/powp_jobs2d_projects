@@ -65,21 +65,13 @@ public class TestJobs2dApp {
 
         DrawPanelController drawerController = DrawerFeature.getDrawerController();
 
-        // Common transformation for Line Simulator and Special Line Simulator
+        // TransformationDriver for Line Simulator
         TransformingDriver commonTransformedDriver = new TransformingDriver(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
-        commonTransformedDriver.scale(0.5, 0.4);
-        commonTransformedDriver.rotate(45);
-        //commonTransformedDriver.flip();
-
-        // Line Simulator
         DriverFeature.addDriver("Line Simulator", commonTransformedDriver);
         DriverFeature.getDriverManager().setCurrentDriver(commonTransformedDriver);
 
-        // Special Line Simulator
+        // TransformationDriver for Special Line Simulator
         commonTransformedDriver = new TransformingDriver(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
-        commonTransformedDriver.scale(0.5, 0.25);
-        commonTransformedDriver.rotate(88);
-        //commonTransformedDriver.flip();
         DriverFeature.addDriver("Special Line Simulator", commonTransformedDriver);
 
         DriverFeature.updateDriverInfo();
