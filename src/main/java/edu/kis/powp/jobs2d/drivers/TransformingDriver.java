@@ -6,7 +6,7 @@ import edu.kis.powp.jobs2d.Job2dDriver;
  * Decorator for Job2dDriver that applies transformations before forwarding the instructions.
  */
 public class TransformingDriver implements Job2dDriver {
-    private Job2dDriver driver;
+    private final Job2dDriver driver;
     private double scaleX;
     private double scaleY;
     private double rotationAngle;
