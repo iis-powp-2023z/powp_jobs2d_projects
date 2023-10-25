@@ -2,6 +2,7 @@ package edu.kis.powp.jobs2d.drivers;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.LoggerDriver;
+import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
 
 /**
  * Driver manager provides means to setup the driver. It also enables other
