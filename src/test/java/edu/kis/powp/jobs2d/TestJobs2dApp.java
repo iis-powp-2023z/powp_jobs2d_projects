@@ -68,11 +68,25 @@ public class TestJobs2dApp {
 
         // TransformationDriver for Line Simulator
         TransformingDriver commonTransformedDriver = new TransformingDriver(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
+        commonTransformedDriver.addModifier(new ScalingModifier(1.0, 1.0));
+        commonTransformedDriver.addModifier(new RotationModifier(0));
+        commonTransformedDriver.addModifier(new XAxisMovingModifier(0));
+        commonTransformedDriver.addModifier(new YAxisMovingModifier(0));
+        //commonTransformedDriver.addModifier(new VerticalFlipModifier());
+        //commonTransformedDriver.addModifier(new HorizontalFlipModifier());
+
         DriverFeature.addDriver("Line Simulator", commonTransformedDriver);
         DriverFeature.getDriverManager().setCurrentDriver(commonTransformedDriver);
 
         // TransformationDriver for Special Line Simulator
         commonTransformedDriver = new TransformingDriver(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
+        commonTransformedDriver.addModifier(new ScalingModifier(1.0, 1.0));
+        commonTransformedDriver.addModifier(new RotationModifier(0));
+        commonTransformedDriver.addModifier(new XAxisMovingModifier(0));
+        commonTransformedDriver.addModifier(new YAxisMovingModifier(0));
+        //commonTransformedDriver.addModifier(new VerticalFlipModifier());
+        //commonTransformedDriver.addModifier(new HorizontalFlipModifier());
+
         DriverFeature.addDriver("Special Line Simulator", commonTransformedDriver);
 
         DriverFeature.updateDriverInfo();
