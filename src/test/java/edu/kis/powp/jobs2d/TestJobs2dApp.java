@@ -76,8 +76,8 @@ public class TestJobs2dApp {
 
         Job2dDriver driver = DriverFeature.getDriverManager().getCurrentDriver();
 
-        LeftMouseClickListener leftMouseClickListener = new LeftMouseClickListener(application, driver);
-        application.getFreePanel().addMouseListener(leftMouseClickListener);
+        DrawLinesMouseListener drawLinesMouseListener = new DrawLinesMouseListener(application, driver);
+        application.getFreePanel().addMouseListener(drawLinesMouseListener);
     }
 
     /**

@@ -7,12 +7,12 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class LeftMouseClickListener implements MouseListener {
+public class DrawLinesMouseListener implements MouseListener {
 
     private Application application;
     private final Job2dDriver driver;
 
-    public LeftMouseClickListener(Application application, Job2dDriver driver) {
+    public DrawLinesMouseListener(Application application, Job2dDriver driver) {
         this.application = application;
         this.driver = driver;
     }
