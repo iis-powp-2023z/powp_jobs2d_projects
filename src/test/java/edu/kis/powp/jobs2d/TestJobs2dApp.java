@@ -48,6 +48,7 @@ public class TestJobs2dApp {
         application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
         application.addTest("Load Triangle", new SelectTestTriangle2OptionListener());
         application.addTest("Load Rectangle",  new SelectTestRectangle2OptionListener());
+        application.addTest("Load Cloned Rectangle",  new SelectTestClone2OptionListener());
 
         application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
 
