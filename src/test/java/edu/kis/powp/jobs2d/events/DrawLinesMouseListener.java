@@ -1,7 +1,8 @@
 package edu.kis.powp.jobs2d.events;
 
 import edu.kis.powp.appbase.Application;
-import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
+import edu.kis.powp.jobs2d.features.DriverFeature;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -9,12 +10,12 @@ import java.awt.event.MouseListener;
 
 public class DrawLinesMouseListener implements MouseListener {
 
-    private Application application;
-    private final Job2dDriver driver;
+    private final Application application;
+    private final DriverManager driver;
 
-    public DrawLinesMouseListener(Application application, Job2dDriver driver) {
+    public DrawLinesMouseListener(Application application) {
         this.application = application;
-        this.driver = driver;
+        this.driver = DriverFeature.getDriverManager();
     }
 
     @Override
@@ -24,10 +25,10 @@ public class DrawLinesMouseListener implements MouseListener {
 
         if (e.getButton() == MouseEvent.BUTTON3) {
             Point point = e.getPoint();
-            driver.setPosition(point.x - (width / 2), point.y - (height / 2));
+            driver.getCurrentDriver().setPosition(point.x - (width / 2), point.y - (height / 2));
         } else if (e.getButton() == MouseEvent.BUTTON1) {
             Point point = e.getPoint();
-            driver.operateTo(point.x - (width / 2), point.y - (height / 2));
+            driver.getCurrentDriver().operateTo(point.x - (width / 2), point.y - (height / 2));
         }
     }
 

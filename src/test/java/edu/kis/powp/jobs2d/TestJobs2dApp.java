@@ -10,6 +10,7 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.events.SelectLoadSecretCommandOptionListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
@@ -78,9 +79,7 @@ public class TestJobs2dApp {
                 commandManager);
         CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(windowObserver);
 
-        Job2dDriver driver = DriverFeature.getDriverManager().getCurrentDriver();
-
-        DrawLinesMouseListener drawLinesMouseListener = new DrawLinesMouseListener(application, driver);
+        DrawLinesMouseListener drawLinesMouseListener = new DrawLinesMouseListener(application);
         application.getFreePanel().addMouseListener(drawLinesMouseListener);
     }
 
