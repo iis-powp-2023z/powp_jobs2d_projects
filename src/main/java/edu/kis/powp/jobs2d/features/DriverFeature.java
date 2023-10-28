@@ -17,16 +17,6 @@ public class DriverFeature {
 
 
     /**
-     * Observer implementation to listen for driver changes and update the driver info.
-     */
-    public static class DriverChangeObserver implements Subscriber {
-        @Override
-        public void update() {
-            app.updateInfo(driverManager.getCurrentDriver().toString());
-        }
-    }
-
-    /**
      * Setup jobs2d drivers Plugin and add to application.
      *
      * @param application Application context.
