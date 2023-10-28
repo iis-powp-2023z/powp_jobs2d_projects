@@ -2,6 +2,7 @@ package edu.kis.powp.jobs2d.drivers;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.LoggerDriver;
+import edu.kis.powp.observer.Publisher;
 
 /**
  * Driver manager provides means to setup the driver. It also enables other
@@ -10,12 +11,16 @@ import edu.kis.powp.jobs2d.LoggerDriver;
 public class DriverManager {
 
     private Job2dDriver currentDriver = new LoggerDriver();
+    private Publisher driverChangePublisher = new Publisher();
 
     /**
-     * @param driver Set the driver as current.
+     * Set the driver as the current driver and notify all subscribers of the change.
+     *
+     * @param driver The driver to be set as the current driver.
      */
     public synchronized void setCurrentDriver(Job2dDriver driver) {
         currentDriver = driver;
+        driverChangePublisher.notifyObservers();
     }
 
     /**
@@ -23,5 +28,14 @@ public class DriverManager {
      */
     public synchronized Job2dDriver getCurrentDriver() {
         return currentDriver;
+    }
+
+    /**
+     * Get the publisher responsible for managing subscribers and notifying them of driver changes.
+     *
+     * @return The driver change publisher.
+     */
+    public Publisher getDriverChangePublisher() {
+        return driverChangePublisher;
     }
 }
