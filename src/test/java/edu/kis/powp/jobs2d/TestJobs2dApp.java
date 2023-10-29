@@ -74,7 +74,7 @@ public class TestJobs2dApp {
         // TransformationDriver for Line Simulator
         TransformingDriver commonTransformedDriver = new TransformingDriver(driver);
         commonTransformedDriver.addModifier(new ScalingModifier(0.25, 0.25));
-        DriverFeature.addDriver("Line Simulator - transformed", commonTransformedDriver);
+        DriverFeature.addDriver("Line Simulator  - transformed", commonTransformedDriver);
         DriverFeature.getDriverManager().setCurrentDriver(commonTransformedDriver);
 
         // Driver for Special Line Simulator
