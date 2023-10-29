@@ -66,22 +66,27 @@ public class TestJobs2dApp {
 
         DrawPanelController drawerController = DrawerFeature.getDrawerController();
 
-        // TransformationDriver for Line Simulator
-        TransformingDriver commonTransformedDriver = new TransformingDriver(new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic"));
-        commonTransformedDriver.addModifier(new ScalingModifier(1.0, 1.0));
-        commonTransformedDriver.addModifier(new RotationModifier(0));
-        commonTransformedDriver.addModifier(new ShiftAxesModifier(0, 0));
+        // Driver for Line Simulator
+        Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
+        DriverFeature.addDriver("Line Simulator", driver);
+        DriverFeature.getDriverManager().setCurrentDriver(driver);
 
-        DriverFeature.addDriver("Line Simulator", commonTransformedDriver);
+        // TransformationDriver for Line Simulator
+        TransformingDriver commonTransformedDriver = new TransformingDriver(driver);
+        commonTransformedDriver.addModifier(new ScalingModifier(0.25, 0.25));
+        DriverFeature.addDriver("Line Simulator - transformed", commonTransformedDriver);
         DriverFeature.getDriverManager().setCurrentDriver(commonTransformedDriver);
 
-        // TransformationDriver for Special Line Simulator
-        commonTransformedDriver = new TransformingDriver(new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special"));
-        commonTransformedDriver.addModifier(new ScalingModifier(1.0, 1.0));
-        commonTransformedDriver.addModifier(new RotationModifier(0));
-        commonTransformedDriver.addModifier(new ShiftAxesModifier(0, 0));
+        // Driver for Special Line Simulator
+        driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
+        DriverFeature.addDriver("Special line Simulator", driver);
+        DriverFeature.getDriverManager().setCurrentDriver(driver);
 
-        DriverFeature.addDriver("Special Line Simulator", commonTransformedDriver);
+        // TransformationDriver for Special Line Simulator
+        commonTransformedDriver = new TransformingDriver(driver);
+        commonTransformedDriver.addModifier(new ScalingModifier(0.25, 0.25));
+        DriverFeature.addDriver("Special Line Simulator  - transformed", commonTransformedDriver);
+        DriverFeature.getDriverManager().setCurrentDriver(commonTransformedDriver);
 
         DriverFeature.updateDriverInfo();
     }

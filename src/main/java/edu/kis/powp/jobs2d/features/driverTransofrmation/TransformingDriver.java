@@ -41,5 +41,10 @@ public class TransformingDriver implements Job2dDriver {
         }
         return new int[]{x, y};
     }
+
+    @Override
+    public String toString() {
+        return driver.toString();
+    }
 }
 
