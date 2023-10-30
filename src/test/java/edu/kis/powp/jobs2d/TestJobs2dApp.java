@@ -92,6 +92,9 @@ public class TestJobs2dApp {
         CommandManagerWindowCommandChangeObserver windowObserver = new CommandManagerWindowCommandChangeObserver(
                 commandManager);
         CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(windowObserver);
+
+        DrawLinesMouseListener drawLinesMouseListener = new DrawLinesMouseListener(application);
+        application.getFreePanel().addMouseListener(drawLinesMouseListener);
     }
 
     /**
