@@ -71,19 +71,22 @@ public class TestJobs2dApp {
         DriverFeature.addDriver("Line Simulator", driver);
         DriverFeature.getDriverManager().setCurrentDriver(driver);
 
-        // TransformationDriver for Line Simulator
-        TransformingDriver commonTransformedDriver = new TransformingDriver(driver);
-        commonTransformedDriver.addModifier(new ScalingModifier(0.25, 0.25));
-        DriverFeature.addDriver("Line Simulator  - transformed", commonTransformedDriver);
+        // Transformed Driver for Line Simulator - scaled to 25% and rotated by 90deg
+        TransformingDriver ScaledAndRotatedDriver = new TransformingDriver(driver);
+        ScaledAndRotatedDriver.addModifier(new ScalingModifier(0.25, 0.25));
+        ScaledAndRotatedDriver.addModifier(new RotationModifier(70));
+        DriverFeature.addDriver("Line Simulator  - scale: 1/4, rotation: 70deg", ScaledAndRotatedDriver);
 
         // Driver for Special Line Simulator
         driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
         DriverFeature.addDriver("Special line Simulator", driver);
 
-        // TransformationDriver for Special Line Simulator
-        commonTransformedDriver = new TransformingDriver(driver);
-        commonTransformedDriver.addModifier(new ScalingModifier(0.25, 0.25));
-        DriverFeature.addDriver("Special Line Simulator  - transformed", commonTransformedDriver);
+        // Transformed Driver for Special Line Simulator - flipped in both planes and shifted axes: X(50) Y(-50)
+        TransformingDriver FlippedAndShiftedDriver = new TransformingDriver(driver);
+        FlippedAndShiftedDriver.addModifier(ScalingModifierFactory.createHorizontalFlipModifier());
+        FlippedAndShiftedDriver.addModifier(ScalingModifierFactory.createVerticalFlipModifier());
+        FlippedAndShiftedDriver.addModifier(new ShiftAxesModifier(50, -50));
+        DriverFeature.addDriver("Special Line Simulator  - flipped X and Y, shifted X and Y", FlippedAndShiftedDriver);
 
         DriverFeature.updateDriverInfo();
     }
