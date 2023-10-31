@@ -71,7 +71,7 @@ public class TestJobs2dApp {
         DriverFeature.addDriver("Line Simulator", driver);
         DriverFeature.getDriverManager().setCurrentDriver(driver);
 
-        // Transformed Driver for Line Simulator - scaled to 25% and rotated by 90deg
+        // Transformed Driver for Line Simulator - scaled to 25% and rotated by 70deg
         TransformingDriver ScaledAndRotatedDriver = new TransformingDriver(driver);
         ScaledAndRotatedDriver.addModifier(new ScalingModifier(0.25, 0.25));
         ScaledAndRotatedDriver.addModifier(new RotationModifier(70));
