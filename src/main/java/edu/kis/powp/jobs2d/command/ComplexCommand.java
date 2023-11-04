@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ComplexCommand implements ICompoundCommand {
-
     private List<DriverCommand> listOfCommands;
     private String name;
 
@@ -47,4 +46,11 @@ public class ComplexCommand implements ICompoundCommand {
         return complexCommand;
     }
 
+    public List<DriverCommand> getListOfCommands() {
+        return listOfCommands;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
