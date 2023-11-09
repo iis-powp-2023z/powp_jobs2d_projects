@@ -42,7 +42,7 @@ public class CloneTest {
         assertEquals(commandToClone.getName(), clonedCommand.getName());
 
         for (int i = 0; i < commandToClone.getListOfCommands().size(); i++) {
-            assertEquals(commandToClone.getListOfCommands().get(i), commandToClone.getListOfCommands().get(i));
+            assertEquals(commandToClone.getListOfCommands().get(i), clonedCommand.getListOfCommands().get(i));
         }
     }
 }
