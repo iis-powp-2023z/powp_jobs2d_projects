@@ -2,10 +2,11 @@ package edu.kis.powp.jobs2d.drivers.composite;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DriverContainer implements Job2dDriver {
-    private List<Job2dDriver> children;
+    private List<Job2dDriver> children = new ArrayList<>();
 
     public DriverContainer(List<Job2dDriver> children) {
         this.children = children;
