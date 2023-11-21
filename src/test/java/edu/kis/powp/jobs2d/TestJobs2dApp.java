@@ -11,13 +11,12 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
-import edu.kis.powp.jobs2d.drivers.DriverMacro;
 import edu.kis.powp.jobs2d.drivers.PreciseLoggerDriver;
-import edu.kis.powp.jobs2d.features.MacroFeature;
-import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.events.*;
+import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
+import edu.kis.powp.jobs2d.features.MacroFeature;
 import edu.kis.powp.jobs2d.features.CommandsFeature;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
@@ -71,7 +70,7 @@ public class TestJobs2dApp {
 
         Job2dDriver preciousLoggerDriver = new PreciseLoggerDriver();
         DriverFeature.addDriver("Precise logger driver", preciousLoggerDriver);
-
+        DriverFeature.addDriver("Macro Driver", MacroFeature.getDriverMacro());
         Job2dDriver driverContainer = new DriverContainer(
                 Arrays.asList(
                         new PreciseLoggerDriver(),

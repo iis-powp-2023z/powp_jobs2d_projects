@@ -18,10 +18,10 @@ public class DriverMacro implements Job2dDriver {
     }
     @Override
     public void setPosition(int x, int y) {
-        this.macro.add(new OperateToCommand(x, y));
+        this.macro.add(new SetPositionCommand(x, y));
     }
     @Override
     public void operateTo(int x, int y) {
-        this.macro.add(new SetPositionCommand(x, y));
+        this.macro.add(new OperateToCommand(x, y));
     }
 }

@@ -9,24 +9,20 @@ public class MacroFeature {
     private static Application app;
     private static DriverMacro driverMacro;
 
-    public static void setDriverMacro(DriverMacro driverMacro) {
-        MacroFeature.driverMacro = driverMacro;
+    public static void setDriverMacro() {
+        MacroFeature.driverMacro = new DriverMacro();
     }
-    private static boolean recording;
+
     public static DriverMacro getDriverMacro(){
         return driverMacro;
     }
-    public static void setRecording(boolean rec){
-        MacroFeature.recording = rec;
-    }
-    public static boolean getRecording(){
-        return MacroFeature.recording;
-    }
+
     public static void setupMacro(Application application) {
         app = application;
-        app.addComponentMenu(MacroFeature.class, "Macro recording");
-        app.addComponentMenuElement(MacroFeature.class, "Start", new SelectMacroStartListener());
-        app.addComponentMenuElement(MacroFeature.class, "Stop", new SelectMacroStopListener());
-        app.addComponentMenuElement(MacroFeature.class, "Clear", new SelectMacroClearListener());
+        driverMacro = new DriverMacro();
+        app.addComponentMenu(MacroFeature.class, "Macro");
+        app.addComponentMenuElement(MacroFeature.class, "Start", new SelectMacroStartListener(driverMacro, DriverFeature.getDriverManager()));
+        app.addComponentMenuElement(MacroFeature.class, "Stop", new SelectMacroStopListener(driverMacro, DriverFeature.getDriverManager()));
+        app.addComponentMenuElement(MacroFeature.class, "Clear", new SelectMacroClearListener(MacroFeature.getDriverMacro()));
     }
 }
