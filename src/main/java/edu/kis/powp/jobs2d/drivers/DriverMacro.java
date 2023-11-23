@@ -4,17 +4,16 @@ import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DriverMacro implements Job2dDriver {
-    private ArrayList<DriverCommand> macro = new ArrayList<>();
+    private List<DriverCommand> macro = new ArrayList<>();
 
-    public ArrayList<DriverCommand> getMacro() {
+    public List<DriverCommand> getMacro() {
         return this.macro;
     }
     public void clear(){
-        if (!this.macro.isEmpty()) {
-            this.macro.clear();
-        }
+        this.macro.clear();
     }
     @Override
     public void setPosition(int x, int y) {

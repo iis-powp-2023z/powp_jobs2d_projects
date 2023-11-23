@@ -70,7 +70,6 @@ public class TestJobs2dApp {
 
         Job2dDriver preciousLoggerDriver = new PreciseLoggerDriver();
         DriverFeature.addDriver("Precise logger driver", preciousLoggerDriver);
-        DriverFeature.addDriver("Macro Driver", MacroFeature.getDriverMacro());
         Job2dDriver driverContainer = new DriverContainer(
                 Arrays.asList(
                         new PreciseLoggerDriver(),
