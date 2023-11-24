@@ -10,7 +10,7 @@ public class DriverMacro implements Job2dDriver {
     private List<DriverCommand> macro = new ArrayList<>();
 
     public List<DriverCommand> getMacro() {
-        return this.macro;
+        return new ArrayList<>(this.macro);
     }
     public void clear(){
         this.macro.clear();
