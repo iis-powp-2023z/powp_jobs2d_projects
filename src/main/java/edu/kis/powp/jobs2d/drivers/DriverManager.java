@@ -2,6 +2,7 @@ package edu.kis.powp.jobs2d.drivers;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.LoggerDriver;
+import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.observer.Publisher;
 
 /**
@@ -13,13 +14,18 @@ public class DriverManager {
     private Job2dDriver currentDriver = new LoggerDriver();
     private Publisher driverChangePublisher = new Publisher();
 
+    private DriverContainer container = new DriverContainer();
+
     /**
      * Set the driver as the current driver and notify all subscribers of the change.
      *
      * @param driver The driver to be set as the current driver.
      */
     public synchronized void setCurrentDriver(Job2dDriver driver) {
+        container.remove(currentDriver);
+        container.add(driver);
         currentDriver = driver;
+
         driverChangePublisher.notifyObservers();
     }
 
@@ -27,7 +33,7 @@ public class DriverManager {
      * @return Current driver.
      */
     public synchronized Job2dDriver getCurrentDriver() {
-        return currentDriver;
+        return container;
     }
 
     /**
@@ -37,5 +43,15 @@ public class DriverManager {
      */
     public Publisher getDriverChangePublisher() {
         return driverChangePublisher;
+    }
+
+    public synchronized void addDriver(Job2dDriver driver) {
+        container.add(driver);
+        driverChangePublisher.notifyObservers();
+    }
+
+    public synchronized void removeDriver(Job2dDriver driver) {
+        container.remove(driver);
+        driverChangePublisher.notifyObservers();
     }
 }
