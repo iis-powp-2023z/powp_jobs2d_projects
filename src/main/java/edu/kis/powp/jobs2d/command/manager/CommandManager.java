@@ -63,7 +63,6 @@ public class CommandManager {
             @Override
             public void accept(CommandVisitor commandVisitor) {
                 commandVisitor.visitComplexCommand(this);
-                this.iterator().forEachRemaining(command -> command.accept(commandVisitor));
             }
 
             @Override

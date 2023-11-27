@@ -14,6 +14,7 @@ public class CommandCountingVisitor implements CommandVisitor {
     @Override
     public void visitComplexCommand(ICompoundCommand complexCommand) {
         complexCommandCount++;
+        complexCommand.iterator().forEachRemaining(command -> command.accept(this));
     }
 
     @Override

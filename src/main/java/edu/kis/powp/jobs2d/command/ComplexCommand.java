@@ -50,7 +50,6 @@ public class ComplexCommand implements ICompoundCommand {
     @Override
     public void accept(CommandVisitor commandVisitor) {
         commandVisitor.visitComplexCommand(this);
-        this.iterator().forEachRemaining(command -> command.accept(commandVisitor));
     }
 
     public List<DriverCommand> getListOfCommands() {
