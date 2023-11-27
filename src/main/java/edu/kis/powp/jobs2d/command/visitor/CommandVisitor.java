@@ -6,7 +6,7 @@ import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
 
 public interface CommandVisitor {
-    void visitComplexCommand(ICompoundCommand complexCommand);
+    void visitComplexCommand(ComplexCommand complexCommand);
     void visitOperateToCommand(OperateToCommand operateToCommand);
     void visitSetPositionCommand(SetPositionCommand setPositionCommand);
 }

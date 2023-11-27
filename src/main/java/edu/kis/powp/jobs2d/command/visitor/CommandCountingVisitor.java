@@ -12,7 +12,7 @@ public class CommandCountingVisitor implements CommandVisitor {
     private int setPositionCommandCount = 0;
 
     @Override
-    public void visitComplexCommand(ICompoundCommand complexCommand) {
+    public void visitComplexCommand(ComplexCommand complexCommand) {
         complexCommandCount++;
         complexCommand.iterator().forEachRemaining(command -> command.accept(this));
     }
