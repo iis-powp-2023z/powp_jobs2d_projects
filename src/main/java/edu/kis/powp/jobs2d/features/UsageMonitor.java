@@ -39,13 +39,13 @@ public class UsageMonitor implements IUsageMonitor {
     }
 
     @Override
-    public void addFullDistanceTraveled(double x, double y) {
-        usageMonitorStorage.addFullDistanceTraveled(calculateDistance(x, y));
+    public void addFullDistanceTraveled(double x1, double y1, double x2, double y2) {
+        usageMonitorStorage.addFullDistanceTraveled(calculateDistance(x1, y1, x2, y2));
     }
 
     @Override
-    public void addWorkDistanceTraveled(double x, double y) {
-        usageMonitorStorage.addWorkDistanceTraveled(calculateDistance(x, y));
+    public void addWorkDistanceTraveled(double x1, double y1, double x2, double y2) {
+        usageMonitorStorage.addWorkDistanceTraveled(calculateDistance(x1, y1, x2, y2));
     }
 
     public void printUsage() {
@@ -53,7 +53,7 @@ public class UsageMonitor implements IUsageMonitor {
         logger.info("Work distance traveled: " + usageMonitorStorage.getWorkDistanceTraveled());
     }
 
-    private double calculateDistance(double x, double y) {
-        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+    private double calculateDistance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     }
 }
