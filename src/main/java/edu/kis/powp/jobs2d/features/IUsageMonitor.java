@@ -11,9 +11,9 @@ public interface IUsageMonitor {
 
     void addWorkDistanceTraveled(double distance);
 
-    void addFullDistanceTraveled(double x1, double y1, double x2, double y2);
+    void addFullDistanceTraveled(double x1, double y1);
 
-    void addWorkDistanceTraveled(double x1, double y1, double x2, double y2);
+    void addWorkDistanceTraveled(double x1, double y1);
 
     void printUsage();
 }
