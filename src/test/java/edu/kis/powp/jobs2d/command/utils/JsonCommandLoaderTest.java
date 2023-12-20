@@ -20,7 +20,7 @@ public class JsonCommandLoaderTest extends TestCase {
     }
 
     public void testLoadFromInvalidFile() {
-        String path = "C:\\Edu\\Sem7\\powp\\powp_jobs2d_projects\\src\\test\\CommandsFiles\\invalidCommandsJson.json";
+        String path = "/Users/adamludwiczak/IdeaProjects/powp_jobs2d_projects_rf/src/test/CommandsFiles/invalidCommandsJson.json";
         JsonCommandLoader jsonCommandLoader = new JsonCommandLoader();
         Optional<JsonCommandList> commands = jsonCommandLoader.loadFromFile(path);
         assertFalse(commands.isPresent());
@@ -38,11 +38,14 @@ public class JsonCommandLoaderTest extends TestCase {
 
         expectedList.setCommands(expectedCommands);
 
-        String path = "C:\\Edu\\Sem7\\powp\\powp_jobs2d_projects\\src\\test\\CommandsFiles\\validCommandsJson.json";
+        String path = "/Users/adamludwiczak/IdeaProjects/powp_jobs2d_projects_rf/src/test/CommandsFiles/validCommandsJson.json";
         JsonCommandLoader jsonCommandLoader = new JsonCommandLoader();
         Optional<JsonCommandList> commands = jsonCommandLoader.loadFromFile(path);
 
-        assertTrue(commands.isPresent());
+        for(int i = 0; i < commands.get().getCommands().size(); i++) {
+            assertEquals(expectedList.getCommands().get(i).getX(), commands.get().getCommands().get(i).getX());
+            assertEquals(expectedList.getCommands().get(i).getY(), commands.get().getCommands().get(i).getY());
+        }
     }
 
 
