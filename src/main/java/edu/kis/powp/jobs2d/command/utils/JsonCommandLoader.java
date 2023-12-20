@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.command.utils.entities.JsonCommand;
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommandList;
 
 import java.io.FileNotFoundException;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 public class JsonCommandLoader implements CommandLoader {
-    private final static Logger logger = Logger.getLogger("JsonCommandLoader");
+    private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     @Override
     public Optional<JsonCommandList> loadFromFile(String path) {
@@ -26,18 +27,30 @@ public class JsonCommandLoader implements CommandLoader {
             return Optional.empty();
         }
 
-        JsonCommandList commands;
+        JsonCommandList commandList;
 
         try {
-            commands = gson.fromJson(reader, JsonCommandList.class);
+            commandList = gson.fromJson(reader, JsonCommandList.class);
         } catch (JsonSyntaxException e) {
             logger.warning("Invalid json format");
             return Optional.empty();
         }
 
-        logger.info(commands.toString());
+        // validate data
+        for (JsonCommand command : commandList.getCommands()) {
+            if (!(command.getType().equals("operateTo") || command.getType().equals("setPosition"))) {
+                logger.warning("Invalid command type: " + command.getType());
+                return Optional.empty();
+            }
+            if (command.getX() < 0 || command.getY() < 0) {
+                logger.warning("Invalid position: " + command.getX() + ", " + command.getY());
+                return Optional.empty();
+            }
+        }
 
-        return Optional.of(commands);
+        logger.info("Successfully loaded commands: " + commandList.toString());
+
+        return Optional.of(commandList);
     }
 
     @Override

@@ -53,8 +53,4 @@ public class JsonCommandLoaderTest extends TestCase {
             assertEquals(expectedList.getCommands().get(i).getY(), commands.get().getCommands().get(i).getY());
         }
     }
-
-
-    public void testExportToFile() {
-    }
 }

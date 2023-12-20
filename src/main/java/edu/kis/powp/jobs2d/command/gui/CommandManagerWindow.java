@@ -1,20 +1,24 @@
 package edu.kis.powp.jobs2d.command.gui;
 
-import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 import edu.kis.powp.appbase.gui.WindowComponent;
+import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.manager.CommandManager;
+import edu.kis.powp.jobs2d.command.utils.CommandLoader;
+import edu.kis.powp.jobs2d.command.utils.JsonCommandLoader;
+import edu.kis.powp.jobs2d.command.utils.entities.JsonCommandList;
 import edu.kis.powp.observer.Subscriber;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
+
+    private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     private CommandManager commandManager;
 
@@ -22,6 +26,8 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
     private String observerListString;
     private JTextArea observerListField;
+
+    private TextField commandFilePath;
 
     /**
      *
@@ -56,6 +62,28 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
         content.add(currentCommandField, c);
         updateCurrentCommandField();
 
+        JLabel label = new JLabel("Path to command file:");
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.gridx = 0;
+        c.weighty = 1;
+        content.add(label, c);
+
+        commandFilePath = new TextField();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.gridx = 0;
+        c.weighty = 1;
+        content.add(commandFilePath, c);
+
+        JButton btnLoadFromFile = new JButton("Load from file");
+        btnLoadFromFile.addActionListener((ActionEvent e) -> loadCommandFromFile());
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.gridx = 0;
+        c.weighty = 1;
+        content.add(btnLoadFromFile, c);
+
         JButton btnClearCommand = new JButton("Clear command");
         btnClearCommand.addActionListener((ActionEvent e) -> this.clearCommand());
         c.fill = GridBagConstraints.BOTH;
@@ -71,6 +99,26 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
         c.gridx = 0;
         c.weighty = 1;
         content.add(btnClearObservers, c);
+    }
+
+    private void loadCommandFromFile() {
+        if (commandFilePath.getText().isEmpty()) {
+            return;
+        }
+
+        if (!commandFilePath.getText().endsWith(".json")) {
+            logger.warning("Unsupported file format");
+            return;
+        }
+
+        CommandLoader loader = new JsonCommandLoader();
+        Optional<JsonCommandList> commandList = loader.loadFromFile(commandFilePath.getText());
+        if (commandList.isPresent()) {
+            DriverCommand commands = commandList.get().toDriverCommand();
+            commandManager.setCurrentCommand(commands);
+        } else {
+            clearCommand();
+        }
     }
 
     private void clearCommand() {
