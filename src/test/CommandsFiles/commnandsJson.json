@@ -1,0 +1,44 @@
+{
+  "operations": [
+    {
+      "type": "operateTo",
+      "x": 10,
+      "y": 10
+    },
+    {
+      "type": "setPosition",
+      "x": 20,
+      "y": 20
+    },
+    {
+      "type": "operateTo",
+      "x": 35.5,
+      "y": 22.2
+    },
+    {
+      "type": "setPosition",
+      "x": 15,
+      "y": -18
+    },
+    {
+      "type": "operateTo",
+      "x": 19,
+      "y": 33
+    },
+    {
+      "type": "setPosition",
+      "x": -1.66,
+      "y": 33.33
+    },
+    {
+      "type": "operateTo",
+      "x": 8,
+      "y": 1
+    },
+    {
+      "type": "setPosition",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}
