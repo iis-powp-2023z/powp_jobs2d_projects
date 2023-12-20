@@ -1,5 +1,5 @@
 {
-  "operations": [
+  "commands": [
     {
       "type": "operateTo",
       "x": 10,
@@ -12,23 +12,8 @@
     },
     {
       "type": "operateTo",
-      "x": 35.5,
-      "y": 22.2
-    },
-    {
-      "type": "setPosition",
-      "x": 15,
-      "y": -18
-    },
-    {
-      "type": "operateTo",
       "x": 19,
       "y": 33
-    },
-    {
-      "type": "setPosition",
-      "x": -1.66,
-      "y": 33.33
     },
     {
       "type": "operateTo",
