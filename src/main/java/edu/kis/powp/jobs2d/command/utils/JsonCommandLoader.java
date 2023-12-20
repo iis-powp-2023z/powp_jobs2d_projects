@@ -3,6 +3,7 @@ package edu.kis.powp.jobs2d.command.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
+import edu.kis.powp.jobs2d.command.ComplexCommand;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommand;
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommandList;
@@ -16,7 +17,7 @@ public class JsonCommandLoader implements CommandLoader {
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     @Override
-    public Optional<JsonCommandList> loadFromFile(String path) {
+    public Optional<ComplexCommand> loadFromFile(String path) {
         Gson gson = new Gson();
         JsonReader reader;
 
@@ -50,11 +51,7 @@ public class JsonCommandLoader implements CommandLoader {
 
         logger.info("Successfully loaded commands: " + commandList.toString());
 
-        return Optional.of(commandList);
-    }
-
-    @Override
-    public boolean exportToFile(DriverCommand command, String path) {
-        return false;
+        ComplexCommand driverCommand = commandList.toComplexCommand();
+        return Optional.of(driverCommand);
     }
 }

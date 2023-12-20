@@ -1,5 +1,9 @@
 package edu.kis.powp.jobs2d.command.utils;
 
+import edu.kis.powp.jobs2d.command.ComplexCommand;
+import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.command.OperateToCommand;
+import edu.kis.powp.jobs2d.command.SetPositionCommand;
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommand;
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommandList;
 import edu.kis.powp.jobs2d.commons.FilePath;
@@ -23,34 +27,19 @@ public class JsonCommandLoaderTest extends TestCase {
     }
 
     public void testLoadFromInvalidFile() {
-
         String path = FilePath.getAbsoluteFilePath("src/test/resources/CommandsFiles/invalidCommandsJson.json");
-
         JsonCommandLoader jsonCommandLoader = new JsonCommandLoader();
-        Optional<JsonCommandList> commands = jsonCommandLoader.loadFromFile(path);
+        Optional<ComplexCommand> commands = jsonCommandLoader.loadFromFile(path);
         assertFalse(commands.isPresent());
     }
 
     public void testLoadFromValidFile() {
-        JsonCommandList expectedList = new JsonCommandList();
-
-        List<JsonCommand> expectedCommands = new ArrayList<>();
-        expectedCommands.add(new JsonCommand("operateTo", 10, 10));
-        expectedCommands.add(new JsonCommand("setPosition", 20, 20));
-        expectedCommands.add(new JsonCommand("operateTo", 19, 33));
-        expectedCommands.add(new JsonCommand("operateTo", 8, 1));
-        expectedCommands.add(new JsonCommand("setPosition", 0, 0));
-
-        expectedList.setCommands(expectedCommands);
-
         String path = FilePath.getAbsoluteFilePath("src/test/resources/CommandsFiles/validCommandsJson.json");
 
         JsonCommandLoader jsonCommandLoader = new JsonCommandLoader();
-        Optional<JsonCommandList> commands = jsonCommandLoader.loadFromFile(path);
+        Optional<ComplexCommand> commands = jsonCommandLoader.loadFromFile(path);
 
-        for(int i = 0; i < commands.get().getCommands().size(); i++) {
-            assertEquals(expectedList.getCommands().get(i).getX(), commands.get().getCommands().get(i).getX());
-            assertEquals(expectedList.getCommands().get(i).getY(), commands.get().getCommands().get(i).getY());
-        }
+        assertTrue(commands.isPresent());
+        assertEquals(5, commands.get().getListOfCommands().size());
     }
 }

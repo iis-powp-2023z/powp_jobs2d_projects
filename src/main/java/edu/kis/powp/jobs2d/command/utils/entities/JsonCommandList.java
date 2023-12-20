@@ -1,9 +1,6 @@
 package edu.kis.powp.jobs2d.command.utils.entities;
 
-import edu.kis.powp.jobs2d.command.ComplexCommandBuilder;
-import edu.kis.powp.jobs2d.command.DriverCommand;
-import edu.kis.powp.jobs2d.command.OperateToCommand;
-import edu.kis.powp.jobs2d.command.SetPositionCommand;
+import edu.kis.powp.jobs2d.command.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ public class JsonCommandList {
         this.commands = commands;
     }
 
-    public DriverCommand toDriverCommand() {
+    public ComplexCommand toComplexCommand() {
         ComplexCommandBuilder builder = new ComplexCommandBuilder();
         for (JsonCommand command : commands) {
             if (command.getType().equals(JsonCommand.OPERATE_TO_COMMAND_TYPE)) {

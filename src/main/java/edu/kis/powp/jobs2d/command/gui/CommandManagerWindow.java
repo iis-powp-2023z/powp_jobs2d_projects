@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 
 import edu.kis.powp.appbase.gui.WindowComponent;
+import edu.kis.powp.jobs2d.command.ComplexCommand;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.manager.CommandManager;
 import edu.kis.powp.jobs2d.command.utils.CommandLoader;
@@ -112,9 +113,9 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
         }
 
         CommandLoader loader = new JsonCommandLoader();
-        Optional<JsonCommandList> commandList = loader.loadFromFile(commandFilePath.getText());
+        Optional<ComplexCommand> commandList = loader.loadFromFile(commandFilePath.getText());
         if (commandList.isPresent()) {
-            DriverCommand commands = commandList.get().toDriverCommand();
+            ComplexCommand commands = commandList.get();
             commandManager.setCurrentCommand(commands);
         } else {
             clearCommand();
