@@ -2,8 +2,11 @@ package edu.kis.powp.jobs2d.command.utils;
 
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommand;
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommandList;
+import edu.kis.powp.jobs2d.commons.FilePath;
 import junit.framework.TestCase;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +23,9 @@ public class JsonCommandLoaderTest extends TestCase {
     }
 
     public void testLoadFromInvalidFile() {
-        String path = "/Users/adamludwiczak/IdeaProjects/powp_jobs2d_projects_rf/src/test/CommandsFiles/invalidCommandsJson.json";
+
+        String path = FilePath.getAbsoluteFilePath("src/test/resources/CommandsFiles/invalidCommandsJson.json");
+
         JsonCommandLoader jsonCommandLoader = new JsonCommandLoader();
         Optional<JsonCommandList> commands = jsonCommandLoader.loadFromFile(path);
         assertFalse(commands.isPresent());
@@ -38,7 +43,8 @@ public class JsonCommandLoaderTest extends TestCase {
 
         expectedList.setCommands(expectedCommands);
 
-        String path = "/Users/adamludwiczak/IdeaProjects/powp_jobs2d_projects_rf/src/test/CommandsFiles/validCommandsJson.json";
+        String path = FilePath.getAbsoluteFilePath("src/test/resources/CommandsFiles/validCommandsJson.json");
+
         JsonCommandLoader jsonCommandLoader = new JsonCommandLoader();
         Optional<JsonCommandList> commands = jsonCommandLoader.loadFromFile(path);
 
