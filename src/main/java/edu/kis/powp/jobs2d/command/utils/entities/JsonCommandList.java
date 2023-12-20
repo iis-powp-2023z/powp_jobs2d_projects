@@ -23,9 +23,9 @@ public class JsonCommandList {
     public DriverCommand toDriverCommand() {
         ComplexCommandBuilder builder = new ComplexCommandBuilder();
         for (JsonCommand command : commands) {
-            if (command.getType().equals("operateTo")) {
+            if (command.getType().equals(JsonCommand.OPERATE_TO_COMMAND_TYPE)) {
                 builder.addCommand(new OperateToCommand(command.getX(), command.getY()));
-            } else if (command.getType().equals("setPosition")) {
+            } else if (command.getType().equals(JsonCommand.SET_POSITION_COMMAND_TYPE)) {
                 builder.addCommand(new SetPositionCommand(command.getX(), command.getY()));
             } else {
                 throw new RuntimeException("Invalid command type: " + command.getType());

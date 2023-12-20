@@ -1,6 +1,9 @@
 package edu.kis.powp.jobs2d.command.utils.entities;
 
 public class JsonCommand {
+    public final static String OPERATE_TO_COMMAND_TYPE = "operateTo";
+    public final static String SET_POSITION_COMMAND_TYPE = "setPosition";
+
     private String type;
     private int x;
     private int y;

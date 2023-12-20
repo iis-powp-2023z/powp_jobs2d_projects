@@ -38,7 +38,7 @@ public class JsonCommandLoader implements CommandLoader {
 
         // validate data
         for (JsonCommand command : commandList.getCommands()) {
-            if (!(command.getType().equals("operateTo") || command.getType().equals("setPosition"))) {
+            if (!(command.getType().equals(JsonCommand.OPERATE_TO_COMMAND_TYPE) || command.getType().equals(JsonCommand.SET_POSITION_COMMAND_TYPE))) {
                 logger.warning("Invalid command type: " + command.getType());
                 return Optional.empty();
             }
