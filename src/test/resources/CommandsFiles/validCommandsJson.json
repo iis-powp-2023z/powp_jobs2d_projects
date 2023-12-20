@@ -1,5 +1,5 @@
 {
-  "name" : "test1",
+  "name" : "valid commands",
   "commands": [
     {
       "type": "operateTo",
