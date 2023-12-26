@@ -3,10 +3,12 @@ import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
+import edu.kis.powp.jobs2d.drivers.visitor.DriverVisitor;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class DriverMacro implements Job2dDriver {
+public class DriverMacro implements Job2dDriver, VisitableDriver {
     private List<DriverCommand> macro = new ArrayList<>();
 
     public List<DriverCommand> getMacro() {
@@ -26,5 +28,10 @@ public class DriverMacro implements Job2dDriver {
     @Override
     public void operateTo(int x, int y) {
         this.macro.add(new OperateToCommand(x, y));
+    }
+
+    @Override
+    public void accept(DriverVisitor visitor) {
+        visitor.visitDriverMacro(this);
     }
 }
