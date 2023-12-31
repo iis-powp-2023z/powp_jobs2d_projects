@@ -157,6 +157,7 @@ public class TestJobs2dApp {
 
                 MacroFeature.setupMacro(app);
                 DriverFeature.setupDriverPlugin(app);
+                Extensions.setupExtensions(app);
                 setupDrivers(app);
                 setupPresetTests(app);
                 setupCommandTests(app);
