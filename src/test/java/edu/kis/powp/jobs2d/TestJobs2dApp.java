@@ -23,6 +23,7 @@ import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.*;
 import edu.kis.powp.jobs2d.features.*;
+import edu.kis.powp.jobs2d.gui.Extensions;
 
 public class TestJobs2dApp {
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -49,16 +50,9 @@ public class TestJobs2dApp {
      *
      * @param application Application context.
      */
-    private static void setupCommandTests(Application application) {
-        application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
-        application.addTest("Load Triangle", new SelectTestTriangle2OptionListener());
-        application.addTest("Load Rectangle",  new SelectTestRectangle2OptionListener());
-        application.addTest("Load Cloned Rectangle",  new SelectTestClone2OptionListener());
-
-        application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
-
-        application.addTest("Load macro", new SelectMacro2OptionListener());
-
+    private static void setupCommandTests(Application application)
+    {
+        Extensions.setupExtensions(application);
     }
 
     /**
@@ -157,7 +151,6 @@ public class TestJobs2dApp {
 
                 MacroFeature.setupMacro(app);
                 DriverFeature.setupDriverPlugin(app);
-                Extensions.setupExtensions(app);
                 setupDrivers(app);
                 setupPresetTests(app);
                 setupCommandTests(app);
