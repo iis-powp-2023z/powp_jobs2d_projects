@@ -80,30 +80,6 @@ public class TestJobs2dApp {
         TrackedJob2dDriver trackedJob2dDriver = new TrackedJob2dDriver(loggerDriver, usageMonitor);
         DriverFeature.addDriver("Tracked job 2d driver", trackedJob2dDriver);
 
-        DrawPanelController drawerController = DrawerFeature.getDrawerController();
-
-        // Driver for Line Simulator
-        Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
-        DriverFeature.addDriver("Line Simulator", driver);
-        DriverFeature.getDriverManager().setCurrentDriver(driver);
-
-        // Transformed Driver for Line Simulator - scaled to 25% and rotated by 70deg
-        TransformingDriver ScaledAndRotatedDriver = new TransformingDriver(driver);
-        ScaledAndRotatedDriver.addModifier(new ScalingModifier(0.25, 0.25));
-        ScaledAndRotatedDriver.addModifier(new RotationModifier(70));
-        DriverFeature.addDriver("Line Simulator  - scale: 1/4, rotation: 70deg", ScaledAndRotatedDriver);
-
-        // Driver for Special Line Simulator
-        driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
-        DriverFeature.addDriver("Special line Simulator", driver);
-
-        // Transformed Driver for Special Line Simulator - flipped in both planes and shifted axes: X(50) Y(-50)
-        TransformingDriver FlippedAndShiftedDriver = new TransformingDriver(driver);
-        FlippedAndShiftedDriver.addModifier(ScalingModifierFactory.createHorizontalFlipModifier());
-        FlippedAndShiftedDriver.addModifier(ScalingModifierFactory.createVerticalFlipModifier());
-        FlippedAndShiftedDriver.addModifier(new ShiftAxesModifier(50, -50));
-        DriverFeature.addDriver("Special Line Simulator  - flipped X and Y, shifted X and Y", FlippedAndShiftedDriver);
-
         DriverFeature.updateDriverInfo();
     }
 
