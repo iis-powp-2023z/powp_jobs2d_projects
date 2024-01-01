@@ -44,67 +44,31 @@ public class Extensions
         specialLineTransformingDriver = new TransformingDriver(specialLineSimulator);
     }
 
-    public static void setupExtensions(Application application)
+    public static void setupExtensions(Application app)
     {
-        application.addComponentMenu(Extensions.class, "Extensions");
-        application.addComponentMenuElement(Extensions.class, "Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
-        application.addComponentMenuElement(Extensions.class, "Load macro", new SelectMacro2OptionListener());
+        // Add a new menu
+        app.addComponentMenu(Extensions.class, "Extensions");
 
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Line Simulator",
-                new DriverListener(lineTransformingDriver),
-                false
-        );
+        // Add various extensions
+        app.addComponentMenuElement(Extensions.class, "Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
+        app.addComponentMenuElement(Extensions.class, "Load macro", new SelectMacro2OptionListener());
 
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Special line Simulator",
-                new DriverListener(specialLineTransformingDriver),
-                false
-        );
+        // Add simulators
+        addMenuElementWithCheckbox(app, "Line Simulator", new DriverListener(lineTransformingDriver));
+        addMenuElementWithCheckbox(app, "Special line Simulator", new DriverListener(specialLineTransformingDriver));
 
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Scale: 1/4",
-                new ModifierListener(new ScalingModifier(0.25, 0.25)),
-                false
-        );
+        // Add modifiers
+        addMenuElementWithCheckbox(app, "Scale: 1/4", new ModifierListener(new ScalingModifier(0.25, 0.25)));
+        addMenuElementWithCheckbox(app, "Rotation: 70deg", new ModifierListener(new RotationModifier(70)));
+        addMenuElementWithCheckbox(app, "Horizontal flip", new ModifierListener(ScalingModifierFactory.createHorizontalFlipModifier()));
+        addMenuElementWithCheckbox(app, "Vertical flip", new ModifierListener(ScalingModifierFactory.createVerticalFlipModifier()));
+        addMenuElementWithCheckbox(app, "Shifted X and Y", new ModifierListener(new ShiftAxesModifier(50, -50)));
+        addMenuElementWithCheckbox(app, "Macro", new MacroListener());
+    }
 
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Rotation: 70deg",
-                new ModifierListener(new RotationModifier(70)),
-                false
-        );
-
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Horizontal flip",
-                new ModifierListener(ScalingModifierFactory.createHorizontalFlipModifier()),
-                false
-        );
-
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Vertical flip",
-                new ModifierListener(ScalingModifierFactory.createVerticalFlipModifier()),
-                false
-        );
-
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Shifted X and Y",
-                new ModifierListener(new ShiftAxesModifier(50, -50)),
-                false
-        );
-
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Macro",
-                new MacroListener(),
-                false
-        );
+    private static void addMenuElementWithCheckbox(Application app, String label, ActionListener listener)
+    {
+        app.addComponentMenuElementWithCheckBox(Extensions.class, label, listener, false);
     }
 
     private static class DriverListener implements ActionListener
