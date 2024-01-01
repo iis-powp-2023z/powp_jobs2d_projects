@@ -90,12 +90,10 @@ public class Extensions
             if (enabled)
             {
                 DriverFeature.getDriverManager().addDriver(myDriver);
-                System.out.println("wlanczam " + myDriver);
             }
             else
             {
                 DriverFeature.getDriverManager().removeDriver(myDriver);
-                System.out.println("wylanczam " + myDriver);
             }
         }
     }
@@ -120,13 +118,11 @@ public class Extensions
             {
                 lineTransformingDriver.addModifier(modifier);
                 specialLineTransformingDriver.addModifier(modifier);
-                System.out.println("wlanczam " + modifier);
             }
             else
             {
                 lineTransformingDriver.removeModifier(modifier);
                 specialLineTransformingDriver.removeModifier(modifier);
-                System.out.println("wylanczam " + modifier);
             }
         }
     }
