@@ -4,8 +4,11 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.drivers.DriverMacro;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.events.SelectMacro2OptionListener;
+import edu.kis.powp.jobs2d.events.SelectMacroStartListener;
+import edu.kis.powp.jobs2d.events.SelectMacroStopListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
@@ -81,6 +84,13 @@ public class Extensions
                 new MyListener(flippedAndShiftedDriver),
                 false
         );
+
+        application.addComponentMenuElementWithCheckBox(
+                Extensions.class,
+                "Macro",
+                new MacroListener(),
+                false
+        );
     }
 
     private static class MyListener implements ActionListener
@@ -106,6 +116,36 @@ public class Extensions
                 DriverFeature.getDriverManager().setCurrentDriver(myDriver);
                 System.out.println("wlanczam");
                 currentDriver = myDriver;
+            }
+        }
+    }
+
+    private static class MacroListener implements ActionListener
+    {
+        private boolean enabled;
+        private DriverMacro driverMacro;
+        private ActionListener startMacro, stopMacro;
+
+        public MacroListener()
+        {
+            enabled = false;
+            driverMacro = new DriverMacro();
+            startMacro = new SelectMacroStartListener(driverMacro, DriverFeature.getDriverManager());
+            stopMacro = new SelectMacroStopListener(driverMacro, DriverFeature.getDriverManager());
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            enabled = !enabled;
+
+            if (enabled)
+            {
+                startMacro.actionPerformed(e);
+            }
+            else
+            {
+                stopMacro.actionPerformed(e);
             }
         }
     }
