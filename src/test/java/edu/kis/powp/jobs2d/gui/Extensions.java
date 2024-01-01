@@ -5,7 +5,8 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.events.*;
+import edu.kis.powp.jobs2d.events.SelectMacro2OptionListener;
+import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
@@ -50,11 +51,6 @@ public class Extensions
     public static void setupExtensions(Application application)
     {
         application.addComponentMenu(Extensions.class, "Extensions");
-
-        application.addComponentMenuElement(Extensions.class, "Load secret command", new SelectLoadSecretCommandOptionListener());
-        application.addComponentMenuElement(Extensions.class, "Load Triangle", new SelectTestTriangle2OptionListener());
-        application.addComponentMenuElement(Extensions.class, "Load Rectangle", new SelectTestRectangle2OptionListener());
-        application.addComponentMenuElement(Extensions.class, "Load Cloned Rectangle", new SelectTestClone2OptionListener());
         application.addComponentMenuElement(Extensions.class, "Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
         application.addComponentMenuElement(Extensions.class, "Load macro", new SelectMacro2OptionListener());
 
