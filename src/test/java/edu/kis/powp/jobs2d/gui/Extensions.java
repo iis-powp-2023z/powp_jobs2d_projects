@@ -23,7 +23,6 @@ import java.awt.event.ActionListener;
 
 public class Extensions
 {
-    private static Job2dDriver currentDriver;
     private static Job2dDriver lineDriver;
     private static TransformingDriver scaledAndRotatedDriver;
     private static LineDriverAdapter specialLineSimulator;
@@ -96,26 +95,28 @@ public class Extensions
     private static class MyListener implements ActionListener
     {
         private Job2dDriver myDriver;
+        private boolean enabled;
 
         public MyListener(Job2dDriver myDriver)
         {
+            enabled = false;
             this.myDriver = myDriver;
         }
 
         @Override
         public void actionPerformed(ActionEvent e)
         {
-            if ((Extensions.currentDriver != null) && (Extensions.currentDriver.getClass() == myDriver.getClass()))
+            enabled = !enabled;
+
+            if (enabled)
             {
-                DriverFeature.getDriverManager().setCurrentDriver(null);
-                System.out.println("wylanczam");
-                currentDriver = null;
+                DriverFeature.getDriverManager().addDriver(myDriver);
+                System.out.println("wlanczam " + myDriver);
             }
             else
             {
-                DriverFeature.getDriverManager().setCurrentDriver(myDriver);
-                System.out.println("wlanczam");
-                currentDriver = myDriver;
+                DriverFeature.getDriverManager().removeDriver(myDriver);
+                System.out.println("wylanczam " + myDriver);
             }
         }
     }
