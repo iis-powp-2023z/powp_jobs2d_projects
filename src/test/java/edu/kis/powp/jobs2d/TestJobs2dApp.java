@@ -50,8 +50,6 @@ public class TestJobs2dApp {
         application.addTest("Load Rectangle", new SelectTestRectangle2OptionListener());
         application.addTest("Load Cloned Rectangle", new SelectTestClone2OptionListener());
         application.addTest("Macro Clear", new SelectMacroClearListener(MacroFeature.getDriverMacro()));
-
-        Extensions.setupExtensions(application);
     }
 
     /**
@@ -131,6 +129,7 @@ public class TestJobs2dApp {
                 setupCommandTests(app);
                 setupLogger(app);
                 setupWindows(app);
+                Extensions.setupExtensions(app);
 
                 app.setVisibility(true);
             }
