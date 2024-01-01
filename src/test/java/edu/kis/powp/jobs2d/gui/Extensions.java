@@ -12,6 +12,7 @@ import edu.kis.powp.jobs2d.events.SelectMacroStopListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.jobs2d.features.DriverFeature;
+import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformationModifier;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.RotationModifier;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ScalingModifier;
@@ -23,31 +24,24 @@ import java.awt.event.ActionListener;
 
 public class Extensions
 {
-    private static Job2dDriver lineDriver;
-    private static TransformingDriver scaledAndRotatedDriver;
-    private static LineDriverAdapter specialLineSimulator;
-    private static TransformingDriver flippedAndShiftedDriver;
+    private static TransformingDriver lineTransformingDriver;
+    private static TransformingDriver specialLineTransformingDriver;
 
     static
     {
         DrawPanelController drawerController = DrawerFeature.getDrawerController();
 
         // Driver for Line Simulator
-        lineDriver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
-
-        // Transformed Driver for Line Simulator - scaled to 25% and rotated by 70deg
-        scaledAndRotatedDriver = new TransformingDriver(lineDriver);
-        scaledAndRotatedDriver.addModifier(new ScalingModifier(0.25, 0.25));
-        scaledAndRotatedDriver.addModifier(new RotationModifier(70));
+        Job2dDriver lineDriver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
 
         // Driver for Special Line Simulator
-        specialLineSimulator = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
+        LineDriverAdapter specialLineSimulator = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 
-        // Transformed Driver for Special Line Simulator - flipped in both planes and shifted axes: X(50) Y(-50)
-        flippedAndShiftedDriver = new TransformingDriver(specialLineSimulator);
-        flippedAndShiftedDriver.addModifier(ScalingModifierFactory.createHorizontalFlipModifier());
-        flippedAndShiftedDriver.addModifier(ScalingModifierFactory.createVerticalFlipModifier());
-        flippedAndShiftedDriver.addModifier(new ShiftAxesModifier(50, -50));
+        // Transforming Driver for Line Simulator
+        lineTransformingDriver = new TransformingDriver(lineDriver);
+
+        // Transforming Driver for Special Line Simulator
+        specialLineTransformingDriver = new TransformingDriver(specialLineSimulator);
     }
 
     public static void setupExtensions(Application application)
@@ -59,28 +53,49 @@ public class Extensions
         application.addComponentMenuElementWithCheckBox(
                 Extensions.class,
                 "Line Simulator",
-                new MyListener(lineDriver),
-                false
-        );
-
-        application.addComponentMenuElementWithCheckBox(
-                Extensions.class,
-                "Line Simulator  - scale: 1/4, rotation: 70deg",
-                new MyListener(scaledAndRotatedDriver),
+                new DriverListener(lineTransformingDriver),
                 false
         );
 
         application.addComponentMenuElementWithCheckBox(
                 Extensions.class,
                 "Special line Simulator",
-                new MyListener(specialLineSimulator),
+                new DriverListener(specialLineTransformingDriver),
                 false
         );
 
         application.addComponentMenuElementWithCheckBox(
                 Extensions.class,
-                "Special Line Simulator  - flipped X and Y, shifted X and Y",
-                new MyListener(flippedAndShiftedDriver),
+                "Scale: 1/4",
+                new ModifierListener(new ScalingModifier(0.25, 0.25)),
+                false
+        );
+
+        application.addComponentMenuElementWithCheckBox(
+                Extensions.class,
+                "Rotation: 70deg",
+                new ModifierListener(new RotationModifier(70)),
+                false
+        );
+
+        application.addComponentMenuElementWithCheckBox(
+                Extensions.class,
+                "Horizontal flip",
+                new ModifierListener(ScalingModifierFactory.createHorizontalFlipModifier()),
+                false
+        );
+
+        application.addComponentMenuElementWithCheckBox(
+                Extensions.class,
+                "Vertical flip",
+                new ModifierListener(ScalingModifierFactory.createVerticalFlipModifier()),
+                false
+        );
+
+        application.addComponentMenuElementWithCheckBox(
+                Extensions.class,
+                "Shifted X and Y",
+                new ModifierListener(new ShiftAxesModifier(50, -50)),
                 false
         );
 
@@ -92,12 +107,12 @@ public class Extensions
         );
     }
 
-    private static class MyListener implements ActionListener
+    private static class DriverListener implements ActionListener
     {
         private Job2dDriver myDriver;
         private boolean enabled;
 
-        public MyListener(Job2dDriver myDriver)
+        public DriverListener(Job2dDriver myDriver)
         {
             enabled = false;
             this.myDriver = myDriver;
@@ -117,6 +132,37 @@ public class Extensions
             {
                 DriverFeature.getDriverManager().removeDriver(myDriver);
                 System.out.println("wylanczam " + myDriver);
+            }
+        }
+    }
+
+    private static class ModifierListener implements ActionListener
+    {
+        private boolean enabled;
+        private TransformationModifier modifier;
+
+        public ModifierListener(TransformationModifier modifier)
+        {
+            enabled = false;
+            this.modifier = modifier;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            enabled = !enabled;
+
+            if (enabled)
+            {
+                lineTransformingDriver.addModifier(modifier);
+                specialLineTransformingDriver.addModifier(modifier);
+                System.out.println("wlanczam " + modifier);
+            }
+            else
+            {
+                lineTransformingDriver.removeModifier(modifier);
+                specialLineTransformingDriver.removeModifier(modifier);
+                System.out.println("wylanczam " + modifier);
             }
         }
     }
