@@ -73,7 +73,7 @@ public class Extensions
         addMenuElementWithCheckbox(app, "Horizontal flip", new ModifierListener(ScalingModifierFactory.createHorizontalFlipModifier()));
         addMenuElementWithCheckbox(app, "Vertical flip", new ModifierListener(ScalingModifierFactory.createVerticalFlipModifier()));
         addMenuElementWithCheckbox(app, "Shifted X and Y", new ModifierListener(new ShiftAxesModifier(50, -50)));
-        addMenuElementWithCheckbox(app, "Macro", new MacroListener());
+        addMenuElementWithCheckbox(app, "Macro", new MacroListener(DriverFeature.getDriverManager()));
     }
 
     private static void addMenuElementWithCheckbox(Application app, String label, ActionListener listener)
@@ -147,12 +147,12 @@ public class Extensions
         private DriverMacro driverMacro;
         private ActionListener startMacro, stopMacro;
 
-        public MacroListener()
+        public MacroListener(DriverManager driverManager)
         {
             enabled = false;
             driverMacro = new DriverMacro();
-            startMacro = new SelectMacroStartListener(driverMacro, DriverFeature.getDriverManager());
-            stopMacro = new SelectMacroStopListener(driverMacro, DriverFeature.getDriverManager());
+            startMacro = new SelectMacroStartListener(driverMacro, driverManager);
+            stopMacro = new SelectMacroStopListener(driverMacro, driverManager);
         }
 
         @Override
