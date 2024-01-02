@@ -77,6 +77,13 @@ public class TestJobs2dApp {
         TrackedJob2dDriver trackedJob2dDriver = new TrackedJob2dDriver(loggerDriver, usageMonitor);
         DriverFeature.addDriver("Tracked job 2d driver", trackedJob2dDriver);
 
+        // Driver for Line Simulator
+        DriverFeature.addDriver("Line Simulator", Extensions.getLineSimulator());
+        DriverFeature.getDriverManager().setCurrentDriver(Extensions.getLineSimulator());
+
+        // Driver for Special Line Simulator
+        DriverFeature.addDriver("Special Line Simulator", Extensions.getSpecialLineSimulator());
+
         DriverFeature.updateDriverInfo();
     }
 

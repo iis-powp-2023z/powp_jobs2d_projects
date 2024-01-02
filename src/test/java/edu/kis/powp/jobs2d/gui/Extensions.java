@@ -53,10 +53,6 @@ public class Extensions
         app.addComponentMenuElement(Extensions.class, "Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
         app.addComponentMenuElement(Extensions.class, "Load macro", new SelectMacro2OptionListener());
 
-        // Add simulators
-        addMenuElementWithCheckbox(app, "Line Simulator", new DriverListener(lineTransformingDriver));
-        addMenuElementWithCheckbox(app, "Special line Simulator", new DriverListener(specialLineTransformingDriver));
-
         // Add modifiers
         addMenuElementWithCheckbox(app, "Scale: 1/4", new ModifierListener(new ScalingModifier(0.25, 0.25)));
         addMenuElementWithCheckbox(app, "Rotation: 70deg", new ModifierListener(new RotationModifier(70)));
@@ -69,33 +65,6 @@ public class Extensions
     private static void addMenuElementWithCheckbox(Application app, String label, ActionListener listener)
     {
         app.addComponentMenuElementWithCheckBox(Extensions.class, label, listener, false);
-    }
-
-    private static class DriverListener implements ActionListener
-    {
-        private Job2dDriver myDriver;
-        private boolean enabled;
-
-        public DriverListener(Job2dDriver myDriver)
-        {
-            enabled = false;
-            this.myDriver = myDriver;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            enabled = !enabled;
-
-            if (enabled)
-            {
-                DriverFeature.getDriverManager().addDriver(myDriver);
-            }
-            else
-            {
-                DriverFeature.getDriverManager().removeDriver(myDriver);
-            }
-        }
     }
 
     private static class ModifierListener implements ActionListener
@@ -155,5 +124,15 @@ public class Extensions
                 stopMacro.actionPerformed(e);
             }
         }
+    }
+
+    public static TransformingDriver getLineSimulator()
+    {
+        return lineTransformingDriver;
+    }
+
+    public static TransformingDriver getSpecialLineSimulator()
+    {
+        return specialLineTransformingDriver;
     }
 }
