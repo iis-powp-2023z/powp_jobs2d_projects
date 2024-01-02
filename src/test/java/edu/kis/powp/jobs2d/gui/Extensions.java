@@ -29,7 +29,7 @@ import java.util.Arrays;
 
 public class Extensions
 {
-    private static TransformingDriver lineTransformingDriver, specialLineTransformingDriver;
+    private static TransformingDriver lineDriver, specialLineDriver;
     private static LoggerDriver loggerDriver;
     private static TrackedJob2dDriver trackedJob2dDriver;
     private static Job2dDriver preciseLoggerDriver, loggerAndDrawerContainer;
@@ -38,17 +38,17 @@ public class Extensions
     {
         DrawPanelController drawerController = DrawerFeature.getDrawerController();
 
-        // Driver for Line Simulator
-        Job2dDriver lineDriver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
+        // Driver Base for Line Simulator
+        Job2dDriver basicLineDriver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
 
-        // Driver for Special Line Simulator
-        LineDriverAdapter specialLineSimulator = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
+        // Driver Base for Special Line Simulator
+        LineDriverAdapter basicSpecialLineSimulator = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
 
         // Transforming Driver for Line Simulator
-        lineTransformingDriver = new TransformingDriver(lineDriver);
+        lineDriver = new TransformingDriver(basicLineDriver);
 
         // Transforming Driver for Special Line Simulator
-        specialLineTransformingDriver = new TransformingDriver(specialLineSimulator);
+        specialLineDriver = new TransformingDriver(basicSpecialLineSimulator);
 
         // Create a logger instance
         loggerDriver = new LoggerDriver();
@@ -87,11 +87,11 @@ public class Extensions
         addMenuElementWithCheckbox(app, "Precise Logger + Line Drawer", new LoggerListener(DriverFeature.getDriverManager(), loggerAndDrawerContainer));
 
         // Add modifiers
-        addMenuElementWithCheckbox(app, "Scale: 1/4", new ModifierListener(new ScalingModifier(0.25, 0.25)));
-        addMenuElementWithCheckbox(app, "Rotation: 70deg", new ModifierListener(new RotationModifier(70)));
-        addMenuElementWithCheckbox(app, "Horizontal flip", new ModifierListener(ScalingModifierFactory.createHorizontalFlipModifier()));
-        addMenuElementWithCheckbox(app, "Vertical flip", new ModifierListener(ScalingModifierFactory.createVerticalFlipModifier()));
-        addMenuElementWithCheckbox(app, "Shifted X and Y", new ModifierListener(new ShiftAxesModifier(50, -50)));
+        addMenuElementWithCheckbox(app, "Scale: 1/4", new ModifierListener(new ScalingModifier(0.25, 0.25), lineDriver, specialLineDriver));
+        addMenuElementWithCheckbox(app, "Rotation: 70deg", new ModifierListener(new RotationModifier(70), lineDriver, specialLineDriver));
+        addMenuElementWithCheckbox(app, "Horizontal flip", new ModifierListener(ScalingModifierFactory.createHorizontalFlipModifier(), lineDriver, specialLineDriver));
+        addMenuElementWithCheckbox(app, "Vertical flip", new ModifierListener(ScalingModifierFactory.createVerticalFlipModifier(), lineDriver, specialLineDriver));
+        addMenuElementWithCheckbox(app, "Shifted X and Y", new ModifierListener(new ShiftAxesModifier(50, -50), lineDriver, specialLineDriver));
         addMenuElementWithCheckbox(app, "Macro", new MacroListener(DriverFeature.getDriverManager()));
     }
 
@@ -135,11 +135,14 @@ public class Extensions
     {
         private boolean enabled;
         private TransformationModifier modifier;
+        private TransformingDriver lineTrans, specialLineTrans;
 
-        public ModifierListener(TransformationModifier modifier)
+        public ModifierListener(TransformationModifier modifier, TransformingDriver lineTrans, TransformingDriver specialLineTrans)
         {
             enabled = false;
             this.modifier = modifier;
+            this.lineTrans = lineTrans;
+            this.specialLineTrans = specialLineTrans;
         }
 
         @Override
@@ -149,13 +152,13 @@ public class Extensions
 
             if (enabled)
             {
-                lineTransformingDriver.addModifier(modifier);
-                specialLineTransformingDriver.addModifier(modifier);
+                this.lineTrans.addModifier(modifier);
+                this.specialLineTrans.addModifier(modifier);
             }
             else
             {
-                lineTransformingDriver.removeModifier(modifier);
-                specialLineTransformingDriver.removeModifier(modifier);
+                this.lineTrans.removeModifier(modifier);
+                this.specialLineTrans.removeModifier(modifier);
             }
         }
     }
@@ -192,11 +195,11 @@ public class Extensions
 
     public static TransformingDriver getLineSimulator()
     {
-        return lineTransformingDriver;
+        return lineDriver;
     }
 
     public static TransformingDriver getSpecialLineSimulator()
     {
-        return specialLineTransformingDriver;
+        return specialLineDriver;
     }
 }
