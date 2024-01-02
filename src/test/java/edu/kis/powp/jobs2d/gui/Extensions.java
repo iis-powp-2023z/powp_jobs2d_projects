@@ -4,14 +4,16 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.LoggerDriver;
 import edu.kis.powp.jobs2d.drivers.DriverMacro;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
+import edu.kis.powp.jobs2d.drivers.adapter.TrackedJob2dDriver;
 import edu.kis.powp.jobs2d.events.SelectMacro2OptionListener;
 import edu.kis.powp.jobs2d.events.SelectMacroStartListener;
 import edu.kis.powp.jobs2d.events.SelectMacroStopListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
-import edu.kis.powp.jobs2d.features.DrawerFeature;
-import edu.kis.powp.jobs2d.features.DriverFeature;
+import edu.kis.powp.jobs2d.features.*;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformationModifier;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.RotationModifier;
@@ -26,6 +28,8 @@ public class Extensions
 {
     private static TransformingDriver lineTransformingDriver;
     private static TransformingDriver specialLineTransformingDriver;
+    private static LoggerDriver loggerDriver;
+    private static TrackedJob2dDriver trackedJob2dDriver;
 
     static
     {
@@ -42,6 +46,14 @@ public class Extensions
 
         // Transforming Driver for Special Line Simulator
         specialLineTransformingDriver = new TransformingDriver(specialLineSimulator);
+
+        // Create a logger instance
+        loggerDriver = new LoggerDriver();
+
+        // Create a TrackedJob2dDriver instance
+        IUsageMonitorStorage usageMonitorStorage = new UsageMonitorStorage();
+        IUsageMonitor usageMonitor = new UsageMonitor(usageMonitorStorage);
+        trackedJob2dDriver = new TrackedJob2dDriver(loggerDriver, usageMonitor);
     }
 
     public static void setupExtensions(Application app)
@@ -52,6 +64,8 @@ public class Extensions
         // Add various extensions
         app.addComponentMenuElement(Extensions.class, "Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
         app.addComponentMenuElement(Extensions.class, "Load macro", new SelectMacro2OptionListener());
+        addMenuElementWithCheckbox(app, "Logger", new LoggerListener(DriverFeature.getDriverManager(), loggerDriver));
+        addMenuElementWithCheckbox(app, "Tracked Job 2D", new LoggerListener(DriverFeature.getDriverManager(), trackedJob2dDriver));
 
         // Add modifiers
         addMenuElementWithCheckbox(app, "Scale: 1/4", new ModifierListener(new ScalingModifier(0.25, 0.25)));
@@ -65,6 +79,37 @@ public class Extensions
     private static void addMenuElementWithCheckbox(Application app, String label, ActionListener listener)
     {
         app.addComponentMenuElementWithCheckBox(Extensions.class, label, listener, false);
+    }
+
+    private static class LoggerListener implements ActionListener
+    {
+        private DriverManager driverManager;
+        private Job2dDriver driver;
+        private boolean enabled;
+
+        public LoggerListener(DriverManager driverManager, Job2dDriver driver)
+        {
+            enabled = false;
+            this.driverManager = driverManager;
+            this.driver = driver;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            enabled = !enabled;
+
+            if (enabled)
+            {
+                driverManager.addDriver(driver);
+            }
+            else
+            {
+                driverManager.removeDriver(driver);
+            }
+
+            DriverFeature.updateDriverInfo();
+        }
     }
 
     private static class ModifierListener implements ActionListener

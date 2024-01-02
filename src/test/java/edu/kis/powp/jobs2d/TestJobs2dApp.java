@@ -6,10 +6,12 @@ import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
 import edu.kis.powp.jobs2d.drivers.PreciseLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.drivers.adapter.TrackedJob2dDriver;
 import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.events.*;
-import edu.kis.powp.jobs2d.features.*;
+import edu.kis.powp.jobs2d.features.CommandsFeature;
+import edu.kis.powp.jobs2d.features.DrawerFeature;
+import edu.kis.powp.jobs2d.features.DriverFeature;
+import edu.kis.powp.jobs2d.features.MacroFeature;
 import edu.kis.powp.jobs2d.gui.Extensions;
 
 import java.awt.*;
@@ -58,10 +60,6 @@ public class TestJobs2dApp {
      * @param application Application context.
      */
     private static void setupDrivers(Application application) {
-
-        Job2dDriver loggerDriver = new LoggerDriver();
-        DriverFeature.addDriver("Logger driver", loggerDriver);
-
         Job2dDriver preciousLoggerDriver = new PreciseLoggerDriver();
         DriverFeature.addDriver("Precise logger driver", preciousLoggerDriver);
         Job2dDriver driverContainer = new DriverContainer(
@@ -71,11 +69,6 @@ public class TestJobs2dApp {
                 )
         );
         DriverFeature.addDriver("Precise Logger + Line Drawer", driverContainer);
-
-        IUsageMonitorStorage usageMonitorStorage = new UsageMonitorStorage();
-        IUsageMonitor usageMonitor = new UsageMonitor(usageMonitorStorage);
-        TrackedJob2dDriver trackedJob2dDriver = new TrackedJob2dDriver(loggerDriver, usageMonitor);
-        DriverFeature.addDriver("Tracked job 2d driver", trackedJob2dDriver);
 
         // Driver for Line Simulator
         DriverFeature.addDriver("Line Simulator", Extensions.getLineSimulator());
