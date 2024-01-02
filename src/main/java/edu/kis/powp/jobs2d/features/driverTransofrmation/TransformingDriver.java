@@ -21,6 +21,11 @@ public class TransformingDriver implements Job2dDriver {
         modifiers.add(modifier);
     }
 
+    public void removeModifier(TransformationModifier modifier)
+    {
+        modifiers.remove(modifier);
+    }
+
     @Override
     public void setPosition(int x, int y) {
         int[] transformed = transformCoordinates(x, y);
