@@ -16,17 +16,13 @@ public class DriverCounterVisitor implements DriverVisitor {
 
     private int count = 0;
 
+    public int getCount() {
+        return count;
+    }
+
     @Override
     public void visitDriverContainer(DriverContainer driverContainer) {
         count += 1;
-        for (Job2dDriver child : driverContainer.getChildren()) {
-            try {
-                Method acceptor = child.getClass().getMethod("accept", DriverVisitor.class);
-                acceptor.invoke(child, this);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     @Override
