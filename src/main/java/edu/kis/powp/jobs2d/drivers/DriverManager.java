@@ -6,6 +6,7 @@ import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.drivers.visitor.DriverCounterVisitor;
 import edu.kis.powp.observer.Publisher;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -29,10 +30,6 @@ public class DriverManager {
         container.remove(currentDriver);
         container.add(driver);
         currentDriver = driver;
-        DriverCounterVisitor counter = new DriverCounterVisitor();
-        VisitableDriver dr = (VisitableDriver) driver;
-        dr.accept(counter);
-        logger.info(counter.toString());
         driverChangePublisher.notifyObservers();
     }
 
@@ -60,5 +57,8 @@ public class DriverManager {
     public synchronized void removeDriver(Job2dDriver driver) {
         container.remove(driver);
         driverChangePublisher.notifyObservers();
+    }
+    public synchronized List<Job2dDriver> getAllDrivers() {
+        return container.getChildren();
     }
 }
