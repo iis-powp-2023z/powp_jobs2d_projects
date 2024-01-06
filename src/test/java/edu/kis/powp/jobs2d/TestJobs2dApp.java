@@ -11,10 +11,13 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
+import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.PreciseLoggerDriver;
+import edu.kis.powp.jobs2d.drivers.VisitableDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.drivers.adapter.TrackedJob2dDriver;
+import edu.kis.powp.jobs2d.drivers.visitor.DriverCounterVisitor;
 import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
 import edu.kis.powp.jobs2d.features.MacroFeature;
@@ -112,7 +115,17 @@ public class TestJobs2dApp {
 
         DriverFeature.updateDriverInfo();
     }
-
+    private static void setupDriverCountTest(Application application, DriverManager driverManager) {
+        application.addTest("Count Drivers", (ActionEvent e) -> {
+            DriverCounterVisitor counter = new DriverCounterVisitor();
+            for (Job2dDriver driver : driverManager.getAllDrivers()) {
+                if (driver instanceof VisitableDriver) {
+                    ((VisitableDriver) driver).accept(counter);
+                }
+            }
+            logger.info(String.valueOf(counter.getCount()));;
+        });
+    }
     private static void setupWindows(Application application) {
 
         CommandManagerWindow commandManager = new CommandManagerWindow(CommandsFeature.getDriverCommandManager());
@@ -162,6 +175,7 @@ public class TestJobs2dApp {
                 setupCommandTests(app);
                 setupLogger(app);
                 setupWindows(app);
+                setupDriverCountTest(app, DriverFeature.getDriverManager());
 
                 app.setVisibility(true);
             }
