@@ -121,8 +121,7 @@ public class TestJobs2dApp {
         DriverCounterService counterService = new DriverCounterService(driverManager);
 
         application.addTest("Count Drivers", (ActionEvent s) -> {
-            Map<String, Integer> counts = counterService.getCounts();
-            counts.forEach((type, count) -> logger.info(type + " count: " + count));
+            counterService.logDriverCounts(logger);
         });
     }
     private static void setupWindows(Application application) {

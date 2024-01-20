@@ -3,8 +3,10 @@ package edu.kis.powp.jobs2d.drivers;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.drivers.visitor.DriverCounterVisitor;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class DriverCounterService {
     private DriverManager driverManager;
@@ -20,15 +22,13 @@ public class DriverCounterService {
                 ((VisitableDriver) driver).accept(counter);
             }
         }
-        Map<String, Integer> counts = new HashMap<>();
-        counts.put("LineDriverAdapter", counter.getVisitLineDriverAdapterCounter());
-        counts.put("TrackedJob2dDriver", counter.getVisitTrackedJob2dDriverCounter());
-        counts.put("DriverMacro", counter.getVisitDriverMacroCounter());
-        counts.put("DriverContainer", counter.getVisitDriverContainerCounter());
-        counts.put("PreciseLoggerDriver", counter.getVisitPreciseLoggerDriverCounter());
-        counts.put("TransformingDriver", counter.getVisitTransformingDriverCounter());
-        return counts;
+        return Collections.singletonMap("VisitDrivers", counter.getVisitDriversContainerCounter());
         }
-    }
+        public void logDriverCounts(Logger logger) {
+            Map<String, Integer> counts = getCounts();
+            counts.forEach((type, count) -> logger.info(type + " count: " + count));
+        }
+
+}
 
 
