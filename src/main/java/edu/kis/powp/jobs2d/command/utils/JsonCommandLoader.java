@@ -1,13 +1,9 @@
 package edu.kis.powp.jobs2d.command.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import edu.kis.powp.jobs2d.command.ComplexCommand;
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommandList;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -16,32 +12,23 @@ public class JsonCommandLoader implements CommandLoader {
 
     @Override
     public Optional<ComplexCommand> loadFromFile(String path) {
-        Gson gson = new Gson();
-        JsonReader reader;
-
-        try {
-            reader = new JsonReader(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            logger.warning("Invalid file path");
+        // read file
+        JsonReader reader = JsonCommandReader.read(path);
+        if (reader == null) {
             return Optional.empty();
         }
 
-        JsonCommandList commandList;
-
-        try {
-            commandList = gson.fromJson(reader, JsonCommandList.class);
-        } catch (JsonSyntaxException e) {
-            logger.warning("Invalid json format");
+        // parse json to commands
+        JsonCommandList commandList = JsonCommandParser.parse(reader);
+        if (commandList == null) {
             return Optional.empty();
         }
 
-        // validate data
-        if (JsonCommandValidator.isJsonCommandsValid(commandList.getCommands()))
-        {
-            logger.warning("Invalid json data");
+        // validate parsed commands
+        boolean ok = JsonCommandValidator.isJsonCommandsValid(commandList.getCommands());
+        if (!ok) {
             return Optional.empty();
         }
-
 
         logger.info("Successfully loaded commands: " + commandList);
 
