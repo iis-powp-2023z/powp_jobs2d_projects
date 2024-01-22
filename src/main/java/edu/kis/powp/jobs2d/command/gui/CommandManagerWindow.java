@@ -12,8 +12,7 @@ import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.ComplexCommand;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.manager.CommandManager;
-import edu.kis.powp.jobs2d.command.utils.CommandLoader;
-import edu.kis.powp.jobs2d.command.utils.JsonCommandLoader;
+import edu.kis.powp.jobs2d.command.utils.*;
 import edu.kis.powp.jobs2d.command.utils.entities.JsonCommandList;
 import edu.kis.powp.observer.Subscriber;
 
@@ -107,12 +106,12 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
             return;
         }
 
-        if (!commandFilePath.getText().endsWith(".json")) {
-            logger.warning("Unsupported file format");
-            return;
-        }
+        String fileExtension = FileHelper.getExtension(commandFilePath.getText());
 
-        CommandLoader loader = new JsonCommandLoader();
+        CommandLoaderType loaderType = CommandLoaderTypeHelper.fromString(fileExtension);
+
+        CommandLoader loader = CommandLoaderFactory.getCommandLoader(loaderType);
+
         Optional<ComplexCommand> commandList = loader.loadFromFile(commandFilePath.getText());
         if (commandList.isPresent()) {
             ComplexCommand commands = commandList.get();
