@@ -5,25 +5,22 @@ import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.LoggerDriver;
-import edu.kis.powp.jobs2d.drivers.DriverMacro;
-import edu.kis.powp.jobs2d.drivers.DriverManager;
 import edu.kis.powp.jobs2d.drivers.PreciseLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.adapter.TrackedJob2dDriver;
 import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.events.SelectMacro2OptionListener;
-import edu.kis.powp.jobs2d.events.SelectMacroStartListener;
-import edu.kis.powp.jobs2d.events.SelectMacroStopListener;
 import edu.kis.powp.jobs2d.events.SelectRunCurrentCommandOptionListener;
 import edu.kis.powp.jobs2d.features.*;
-import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformationModifier;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.RotationModifier;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ScalingModifier;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ScalingModifierFactory;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ShiftAxesModifier;
+import edu.kis.powp.jobs2d.gui.extensions.LoggerListener;
+import edu.kis.powp.jobs2d.gui.extensions.MacroListener;
+import edu.kis.powp.jobs2d.gui.extensions.ModifierListener;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
@@ -98,99 +95,6 @@ public class Extensions
     private static void addMenuElementWithCheckbox(Application app, String label, ActionListener listener)
     {
         app.addComponentMenuElementWithCheckBox(Extensions.class, label, listener, false);
-    }
-
-    private static class LoggerListener implements ActionListener
-    {
-        private DriverManager driverManager;
-        private Job2dDriver driver;
-        private boolean enabled;
-
-        public LoggerListener(DriverManager driverManager, Job2dDriver driver)
-        {
-            enabled = false;
-            this.driverManager = driverManager;
-            this.driver = driver;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            enabled = !enabled;
-
-            if (enabled)
-            {
-                driverManager.addDriver(driver);
-            }
-            else
-            {
-                driverManager.removeDriver(driver);
-            }
-
-            DriverFeature.updateDriverInfo();
-        }
-    }
-
-    private static class ModifierListener implements ActionListener
-    {
-        private boolean enabled;
-        private TransformationModifier modifier;
-        private TransformingDriver lineTrans, specialLineTrans;
-
-        public ModifierListener(TransformationModifier modifier, TransformingDriver lineTrans, TransformingDriver specialLineTrans)
-        {
-            enabled = false;
-            this.modifier = modifier;
-            this.lineTrans = lineTrans;
-            this.specialLineTrans = specialLineTrans;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            enabled = !enabled;
-
-            if (enabled)
-            {
-                this.lineTrans.addModifier(modifier);
-                this.specialLineTrans.addModifier(modifier);
-            }
-            else
-            {
-                this.lineTrans.removeModifier(modifier);
-                this.specialLineTrans.removeModifier(modifier);
-            }
-        }
-    }
-
-    private static class MacroListener implements ActionListener
-    {
-        private boolean enabled;
-        private DriverMacro driverMacro;
-        private ActionListener startMacro, stopMacro;
-
-        public MacroListener(DriverManager driverManager)
-        {
-            enabled = false;
-            driverMacro = new DriverMacro();
-            startMacro = new SelectMacroStartListener(driverMacro, driverManager);
-            stopMacro = new SelectMacroStopListener(driverMacro, driverManager);
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e)
-        {
-            enabled = !enabled;
-
-            if (enabled)
-            {
-                startMacro.actionPerformed(e);
-            }
-            else
-            {
-                stopMacro.actionPerformed(e);
-            }
-        }
     }
 
     public static TransformingDriver getLineSimulator()
