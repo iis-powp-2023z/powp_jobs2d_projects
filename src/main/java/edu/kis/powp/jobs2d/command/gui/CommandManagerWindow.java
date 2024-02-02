@@ -21,7 +21,7 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
     private JTextArea currentCommandField;
 
     private String observerListString;
-    private String commadnString;
+    private String commandString;
     private JTextArea observerListField;
     private JTextArea commandListField;
     private JPanel drawingPanel;
@@ -159,15 +159,15 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
         }
     }
     public void printCommands(){
-        commadnString = "Command list:" + System.lineSeparator();
+        commandString = "Command list:" + System.lineSeparator();
         DriverCommand currentCommand = commandManager.getCurrentCommand();
         if (currentCommand instanceof ComplexCommand) {
             List<DriverCommand> commandsList = ((ComplexCommand) currentCommand).getListOfCommands();
 
             for (DriverCommand cmd : commandsList) {
-                commadnString += System.lineSeparator() + cmd;
+                commandString += System.lineSeparator() + cmd;
             }
         }
-        commandListField.setText(commadnString);
+        commandListField.setText(commandString);
     }
 }
