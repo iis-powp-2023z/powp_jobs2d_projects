@@ -33,7 +33,7 @@ public class DriverCounterVisitor implements DriverVisitor {
             }
         }
         this.visitDriversCounter = 1 + innerDriversCounter;
-    }
+   }
 
     @Override
     public void visitLineDriverAdapter(LineDriverAdapter lineDriverAdapter) {
