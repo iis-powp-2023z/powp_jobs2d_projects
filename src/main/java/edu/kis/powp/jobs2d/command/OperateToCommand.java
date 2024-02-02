@@ -36,9 +36,6 @@ public class OperateToCommand implements DriverCommand {
     public void accept(CommandVisitor commandVisitor) {
         commandVisitor.visitOperateToCommand(this);
     }
-    public String toString() {
-        return "OperateToCommand{posX=" + posX + ", posY=" + posY + "}";
-    }
 
     public int getPosX() {
         return posX;

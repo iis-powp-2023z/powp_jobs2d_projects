@@ -7,11 +7,10 @@ import java.util.List;
 import javax.swing.*;
 
 import edu.kis.powp.appbase.gui.WindowComponent;
-import edu.kis.powp.jobs2d.command.ComplexCommand;
 import edu.kis.powp.jobs2d.command.DriverCommand;
-import edu.kis.powp.jobs2d.command.OperateToCommand;
-import edu.kis.powp.jobs2d.command.SetPositionCommand;
 import edu.kis.powp.jobs2d.command.manager.CommandManager;
+import edu.kis.powp.jobs2d.command.visitor.PrintCommandVisitor;
+import edu.kis.powp.jobs2d.command.visitor.DrawCommandVisitor;
 import edu.kis.powp.observer.Subscriber;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
@@ -25,6 +24,9 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
     private JTextArea observerListField;
     private JTextArea commandListField;
     private JPanel drawingPanel;
+
+    public static final int NewCenterX = 150;
+    public static final int NewCenterY = 150;
 
     /**
      *
@@ -138,36 +140,24 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
         }
     }
     public void drawCommands(Graphics g) {
-        int startPosX = 0, startPosY = 0, endPosX = 0, endPosY = 0;
-        g.translate(150, 150);
+        g.translate(NewCenterX, NewCenterY);
         DriverCommand currentCommand = commandManager.getCurrentCommand();
-        if (currentCommand instanceof ComplexCommand) {
-            List<DriverCommand> commandsList = ((ComplexCommand) currentCommand).getListOfCommands();
-            for (DriverCommand cmd : commandsList) {
-                if (cmd instanceof SetPositionCommand) {
-                    startPosX = ((SetPositionCommand) cmd).getPosX();
-                    startPosY = ((SetPositionCommand) cmd).getPosY();
-                }
-                if (cmd instanceof OperateToCommand) {
-                    endPosX = ((OperateToCommand) cmd).getPosX();
-                    endPosY = ((OperateToCommand) cmd).getPosY();
-                    g.drawLine(startPosX, startPosY, endPosX, endPosY);
-                    startPosX = endPosX;
-                    startPosY = endPosY;
-                }
-            }
+        if (currentCommand != null) {
+            DrawCommandVisitor drawVisitor = new DrawCommandVisitor(g);
+            currentCommand.accept(drawVisitor);
         }
     }
-    public void printCommands(){
-        commandString = "Command list:" + System.lineSeparator();
-        DriverCommand currentCommand = commandManager.getCurrentCommand();
-        if (currentCommand instanceof ComplexCommand) {
-            List<DriverCommand> commandsList = ((ComplexCommand) currentCommand).getListOfCommands();
 
-            for (DriverCommand cmd : commandsList) {
-                commandString += System.lineSeparator() + cmd;
-            }
+    public void printCommands() {
+        PrintCommandVisitor printVisitor = new PrintCommandVisitor();
+        DriverCommand currentCommand = commandManager.getCurrentCommand();
+        System.out.print(currentCommand);
+        if (currentCommand != null) {
+            currentCommand.accept(printVisitor);
+            commandListField.setText("Command step:" + System.lineSeparator() + printVisitor.getCommandsListString());
         }
-        commandListField.setText(commandString);
+        else{
+            commandListField.setText("Command step:" + System.lineSeparator() + "No command loaded");
+        }
     }
 }

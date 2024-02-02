@@ -37,11 +37,6 @@ public class SetPositionCommand implements DriverCommand {
         commandVisitor.visitSetPositionCommand(this);
     }
 
-    @Override
-    public String toString() {
-        return "SetPositionCommand{posX=" + posX + ", posY=" + posY + "}";
-    }
-
     public int getPosX() {
         return posX;
     }
