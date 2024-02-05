@@ -4,7 +4,6 @@ import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.drivers.visitor.DriverCounterVisitor;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 

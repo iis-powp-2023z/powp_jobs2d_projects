@@ -19,6 +19,10 @@ public class TransformingDriver implements Job2dDriver, VisitableDriver {
         this.modifiers = new ArrayList<>();
     }
 
+    public Job2dDriver getDriver() {
+        return this.driver;
+    }
+
     public void addModifier(TransformationModifier modifier) {
         modifiers.add(modifier);
     }
