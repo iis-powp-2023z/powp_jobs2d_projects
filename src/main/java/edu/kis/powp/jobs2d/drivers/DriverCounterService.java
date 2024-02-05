@@ -16,6 +16,7 @@ public class DriverCounterService {
 
     public Map<String, Integer> getCounts() {
         DriverCounterVisitor counter = new DriverCounterVisitor();
+        counter.resetCounter();
         for (Job2dDriver driver : driverManager.getAllDrivers()) {
             if (driver instanceof VisitableDriver) {
                 ((VisitableDriver) driver).accept(counter);

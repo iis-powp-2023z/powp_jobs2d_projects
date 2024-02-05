@@ -20,6 +20,9 @@ public class DriverCounterVisitor implements DriverVisitor {
     public int getVisitDriversContainerCounter() {
         return visitDriversCounter;
     }
+    public void resetCounter() {
+        this.visitDriversCounter = 0;
+    }
 
     @Override
     public void visitDriverContainer(DriverContainer driverContainer) {
