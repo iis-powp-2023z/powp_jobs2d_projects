@@ -8,15 +8,13 @@ import edu.kis.powp.jobs2d.events.SelectMacroStopListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MacroListener implements ActionListener
+public class MacroListener extends ActionTemplate implements ActionListener
 {
-    private boolean enabled;
     private DriverMacro driverMacro;
     private ActionListener startMacro, stopMacro;
 
     public MacroListener(DriverManager driverManager)
     {
-        enabled = false;
         driverMacro = new DriverMacro();
         startMacro = new SelectMacroStartListener(driverMacro, driverManager);
         stopMacro = new SelectMacroStopListener(driverMacro, driverManager);
@@ -25,15 +23,16 @@ public class MacroListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        enabled = !enabled;
+        performAction(e);
+    }
 
-        if (enabled)
-        {
-            startMacro.actionPerformed(e);
-        }
-        else
-        {
-            stopMacro.actionPerformed(e);
-        }
+    @Override
+    protected void onEnable(ActionEvent event) {
+        startMacro.actionPerformed(event);
+    }
+
+    @Override
+    protected void onDisable(ActionEvent event) {
+        stopMacro.actionPerformed(event);
     }
 }

@@ -7,15 +7,13 @@ import edu.kis.powp.jobs2d.features.DriverFeature;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoggerListener implements ActionListener
+public class LoggerListener extends ActionTemplate implements ActionListener
 {
     private DriverManager driverManager;
     private Job2dDriver driver;
-    private boolean enabled;
 
     public LoggerListener(DriverManager driverManager, Job2dDriver driver)
     {
-        enabled = false;
         this.driverManager = driverManager;
         this.driver = driver;
     }
@@ -23,17 +21,17 @@ public class LoggerListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        enabled = !enabled;
-
-        if (enabled)
-        {
-            driverManager.addDriver(driver);
-        }
-        else
-        {
-            driverManager.removeDriver(driver);
-        }
-
+        performAction(e);
         DriverFeature.updateDriverInfo();
+    }
+
+    @Override
+    protected void onEnable(ActionEvent event) {
+        driverManager.addDriver(driver);
+    }
+
+    @Override
+    protected void onDisable(ActionEvent event) {
+        driverManager.removeDriver(driver);
     }
 }

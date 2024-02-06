@@ -6,9 +6,8 @@ import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ModifierListener implements ActionListener
+public class ModifierListener extends ActionTemplate implements ActionListener
 {
-    private boolean enabled;
     private TransformationModifier modifier;
     private TransformingDriver lineTrans, specialLineTrans;
 
@@ -23,17 +22,18 @@ public class ModifierListener implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        enabled = !enabled;
+        performAction(e);
+    }
 
-        if (enabled)
-        {
-            this.lineTrans.addModifier(modifier);
-            this.specialLineTrans.addModifier(modifier);
-        }
-        else
-        {
-            this.lineTrans.removeModifier(modifier);
-            this.specialLineTrans.removeModifier(modifier);
-        }
+    @Override
+    protected void onEnable(ActionEvent event) {
+        this.lineTrans.addModifier(modifier);
+        this.specialLineTrans.addModifier(modifier);
+    }
+
+    @Override
+    protected void onDisable(ActionEvent event) {
+        this.lineTrans.removeModifier(modifier);
+        this.specialLineTrans.removeModifier(modifier);
     }
 }
