@@ -57,10 +57,9 @@ public class TestJobs2dApp {
         application.addTest("Load Triangle", new SelectTestTriangle2OptionListener());
         application.addTest("Load Rectangle", new SelectTestRectangle2OptionListener());
         application.addTest("Load Cloned Rectangle", new SelectTestClone2OptionListener());
-        application.addTest("Macro Clear", new SelectMacroClearListener(MacroFeature.getDriverMacro()));
 
-        Extensions.addComponentMenuElement(application, "Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
-        Extensions.addComponentMenuElement(application, "Load macro", new SelectMacro2OptionListener());
+        application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
+        application.addTest("Load macro", new SelectMacro2OptionListener());
     }
 
     /**

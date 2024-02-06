@@ -19,5 +19,7 @@ public class MacroFeature {
     public static void setupMacro(Application application) {
         app = application;
         driverMacro = new DriverMacro();
+        app.addComponentMenu(MacroFeature.class, "Macro");
+        app.addComponentMenuElement(MacroFeature.class, "Clear", new SelectMacroClearListener(MacroFeature.getDriverMacro()));
     }
 }
