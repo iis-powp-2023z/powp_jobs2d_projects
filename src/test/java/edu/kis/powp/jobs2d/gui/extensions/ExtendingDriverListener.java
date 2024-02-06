@@ -7,12 +7,12 @@ import edu.kis.powp.jobs2d.features.DriverFeature;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class LoggerListener extends ActionTemplate implements ActionListener
+public class ExtendingDriverListener extends ActionTemplate implements ActionListener
 {
     private DriverManager driverManager;
     private Job2dDriver driver;
 
-    public LoggerListener(DriverManager driverManager, Job2dDriver driver)
+    public ExtendingDriverListener(DriverManager driverManager, Job2dDriver driver)
     {
         this.driverManager = driverManager;
         this.driver = driver;

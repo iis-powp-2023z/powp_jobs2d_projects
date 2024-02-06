@@ -16,7 +16,6 @@ import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ScalingModifi
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ScalingModifierFactory;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ShiftAxesModifier;
 import edu.kis.powp.jobs2d.gui.Extensions;
-import edu.kis.powp.jobs2d.gui.extensions.LoggerListener;
 import edu.kis.powp.jobs2d.gui.extensions.MacroListener;
 import edu.kis.powp.jobs2d.gui.extensions.ModifierListener;
 
@@ -152,10 +151,10 @@ public class TestJobs2dApp {
         application.addComponentMenuElement(Logger.class, "OFF logging", (ActionEvent e) -> logger.setLevel(Level.OFF));
 
         // Add loggers to the extensions
-        Extensions.addMenuElementWithCheckbox(application, "Logger", new LoggerListener(DriverFeature.getDriverManager(), loggerDriver));
-        Extensions.addMenuElementWithCheckbox(application, "Tracked Job 2D", new LoggerListener(DriverFeature.getDriverManager(), trackedJob2dDriver));
-        Extensions.addMenuElementWithCheckbox(application, "Precise Logger", new LoggerListener(DriverFeature.getDriverManager(), preciseLoggerDriver));
-        Extensions.addMenuElementWithCheckbox(application, "Precise Logger + Line Drawer", new LoggerListener(DriverFeature.getDriverManager(), loggerAndDrawerContainer));
+        Extensions.addExtendingDriver(application, "Logger", loggerDriver);
+        Extensions.addExtendingDriver(application, "Tracked Job 2D",  trackedJob2dDriver);
+        Extensions.addExtendingDriver(application, "Precise Logger",  preciseLoggerDriver);
+        Extensions.addExtendingDriver(application, "Precise Logger + Line Drawer", loggerAndDrawerContainer);
     }
 
     /**
