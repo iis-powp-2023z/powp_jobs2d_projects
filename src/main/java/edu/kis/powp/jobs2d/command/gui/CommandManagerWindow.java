@@ -2,6 +2,9 @@ package edu.kis.powp.jobs2d.command.gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -10,10 +13,8 @@ import javax.swing.*;
 
 import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.ComplexCommand;
-import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.manager.CommandManager;
 import edu.kis.powp.jobs2d.command.utils.*;
-import edu.kis.powp.jobs2d.command.utils.entities.JsonCommandList;
 import edu.kis.powp.observer.Subscriber;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
@@ -112,12 +113,18 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
         CommandLoader loader = CommandLoaderFactory.getCommandLoader(loaderType);
 
-        Optional<ComplexCommand> commandList = loader.loadFromFile(commandFilePath.getText());
-        if (commandList.isPresent()) {
-            ComplexCommand commands = commandList.get();
-            commandManager.setCurrentCommand(commands);
-        } else {
-            clearCommand();
+        try (FileReader reader = new FileReader(commandFilePath.getText())) {
+            Optional<ComplexCommand> commandList = loader.loadFromReader(reader);
+            if (commandList.isPresent()) {
+                ComplexCommand commands = commandList.get();
+                commandManager.setCurrentCommand(commands);
+            } else {
+                clearCommand();
+            }
+        } catch (FileNotFoundException e) {
+            logger.warning("Invalid file path");
+        } catch (IOException e) {
+            logger.warning("Failed to close file reader");
         }
     }
 
