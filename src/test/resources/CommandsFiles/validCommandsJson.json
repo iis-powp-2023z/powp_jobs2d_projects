@@ -1,0 +1,30 @@
+{
+  "name" : "valid commands",
+  "commands": [
+    {
+      "type": "operateTo",
+      "x": 10,
+      "y": 10
+    },
+    {
+      "type": "setPosition",
+      "x": 20,
+      "y": 20
+    },
+    {
+      "type": "operateTo",
+      "x": 19,
+      "y": 33
+    },
+    {
+      "type": "operateTo",
+      "x": 8,
+      "y": 1
+    },
+    {
+      "type": "setPosition",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}

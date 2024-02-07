@@ -2,18 +2,27 @@ package edu.kis.powp.jobs2d.command.gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 import javax.swing.*;
 
 import edu.kis.powp.appbase.gui.WindowComponent;
 import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.command.ComplexCommand;
 import edu.kis.powp.jobs2d.command.manager.CommandManager;
 import edu.kis.powp.jobs2d.command.visitor.PrintCommandVisitor;
 import edu.kis.powp.jobs2d.command.visitor.DrawCommandVisitor;
+import edu.kis.powp.jobs2d.command.utils.*;
 import edu.kis.powp.observer.Subscriber;
 
 public class CommandManagerWindow extends JFrame implements WindowComponent {
+
+    private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     private CommandManager commandManager;
 
@@ -27,6 +36,8 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
 
     public static final int NewCenterX = 150;
     public static final int NewCenterY = 150;
+
+    private TextField commandFilePath;
 
     /**
      *
@@ -60,6 +71,28 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
         c.weighty = 1;
         content.add(currentCommandField, c);
         updateCurrentCommandField();
+
+        JLabel label = new JLabel("Path to command file:");
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.gridx = 0;
+        c.weighty = 1;
+        content.add(label, c);
+
+        commandFilePath = new TextField();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.gridx = 0;
+        c.weighty = 1;
+        content.add(commandFilePath, c);
+
+        JButton btnLoadFromFile = new JButton("Load from file");
+        btnLoadFromFile.addActionListener((ActionEvent e) -> loadCommandFromFile());
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.gridx = 0;
+        c.weighty = 1;
+        content.add(btnLoadFromFile, c);
 
         JButton btnClearCommand = new JButton("Clear command");
         btnClearCommand.addActionListener((ActionEvent e) -> this.clearCommand());
@@ -101,6 +134,32 @@ public class CommandManagerWindow extends JFrame implements WindowComponent {
         c.weighty = 1;
         content.add(commandListField, c);
         printCommands();
+    }
+
+    private void loadCommandFromFile() {
+        if (commandFilePath.getText().isEmpty()) {
+            return;
+        }
+
+        String fileExtension = FileHelper.getExtension(commandFilePath.getText());
+
+        CommandLoaderType loaderType = CommandLoaderTypeHelper.fromString(fileExtension);
+
+        CommandLoader loader = CommandLoaderFactory.getCommandLoader(loaderType);
+
+        try (FileReader reader = new FileReader(commandFilePath.getText())) {
+            Optional<ComplexCommand> commandList = loader.loadFromReader(reader);
+            if (commandList.isPresent()) {
+                ComplexCommand commands = commandList.get();
+                commandManager.setCurrentCommand(commands);
+            } else {
+                clearCommand();
+            }
+        } catch (FileNotFoundException e) {
+            logger.warning("Invalid file path");
+        } catch (IOException e) {
+            logger.warning("Failed to close file reader");
+        }
     }
 
     private void clearCommand() {
