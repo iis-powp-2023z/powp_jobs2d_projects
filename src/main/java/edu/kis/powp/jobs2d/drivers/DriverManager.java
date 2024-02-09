@@ -3,13 +3,18 @@ package edu.kis.powp.jobs2d.drivers;
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.LoggerDriver;
 import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
+import edu.kis.powp.jobs2d.drivers.visitor.DriverCounterVisitor;
 import edu.kis.powp.observer.Publisher;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Driver manager provides means to setup the driver. It also enables other
  * components and features of the application to react on configuration changes.
  */
 public class DriverManager {
+    private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     private Job2dDriver currentDriver = new LoggerDriver();
     private Publisher driverChangePublisher = new Publisher();
@@ -25,7 +30,6 @@ public class DriverManager {
         container.remove(currentDriver);
         container.add(driver);
         currentDriver = driver;
-
         driverChangePublisher.notifyObservers();
     }
 
@@ -53,5 +57,8 @@ public class DriverManager {
     public synchronized void removeDriver(Job2dDriver driver) {
         container.remove(driver);
         driverChangePublisher.notifyObservers();
+    }
+    public synchronized List<Job2dDriver> getAllDrivers() {
+        return container.getChildren();
     }
 }

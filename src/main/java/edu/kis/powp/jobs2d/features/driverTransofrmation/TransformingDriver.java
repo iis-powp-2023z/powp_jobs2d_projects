@@ -1,6 +1,8 @@
 package edu.kis.powp.jobs2d.features.driverTransofrmation;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.drivers.visitor.DriverVisitor;
+import edu.kis.powp.jobs2d.drivers.VisitableDriver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +10,17 @@ import java.util.List;
 /**
  * Decorator for Job2dDriver that applies transformations before forwarding the instructions.
  */
-public class TransformingDriver implements Job2dDriver {
+public class TransformingDriver implements Job2dDriver, VisitableDriver {
     private final Job2dDriver driver;
     private final List<TransformationModifier> modifiers;
 
     public TransformingDriver(Job2dDriver driver) {
         this.driver = driver;
         this.modifiers = new ArrayList<>();
+    }
+
+    public Job2dDriver getDriver() {
+        return this.driver;
     }
 
     public void addModifier(TransformationModifier modifier) {
@@ -45,6 +51,11 @@ public class TransformingDriver implements Job2dDriver {
     @Override
     public String toString() {
         return driver.toString();
+    }
+
+    @Override
+    public int accept(DriverVisitor visitor) {
+        return visitor.visitTransformingDriver(this);
     }
 }
 

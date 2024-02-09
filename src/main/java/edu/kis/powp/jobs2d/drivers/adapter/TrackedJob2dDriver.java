@@ -1,11 +1,13 @@
 package edu.kis.powp.jobs2d.drivers.adapter;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
+import edu.kis.powp.jobs2d.drivers.visitor.DriverVisitor;
+import edu.kis.powp.jobs2d.drivers.VisitableDriver;
 import edu.kis.powp.jobs2d.features.IUsageMonitor;
 
 import java.util.logging.Logger;
 
-public class TrackedJob2dDriver implements Job2dDriver {
+public class TrackedJob2dDriver implements Job2dDriver, VisitableDriver {
     private final Job2dDriver delegate;
     private final IUsageMonitor usageMonitor;
 
@@ -37,5 +39,10 @@ public class TrackedJob2dDriver implements Job2dDriver {
     private void updatePosition(int x, int y) {
         startX = x;
         startY = y;
+    }
+
+    @Override
+    public int accept(DriverVisitor visitor) {
+        return visitor.visitTrackedJob2dDriver(this);
     }
 }
