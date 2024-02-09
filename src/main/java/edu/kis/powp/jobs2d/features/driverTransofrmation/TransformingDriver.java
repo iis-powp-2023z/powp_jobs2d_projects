@@ -54,8 +54,8 @@ public class TransformingDriver implements Job2dDriver, VisitableDriver {
     }
 
     @Override
-    public void accept(DriverVisitor visitor) {
-        visitor.visitTransformingDriver(this);
+    public int accept(DriverVisitor visitor) {
+        return visitor.visitTransformingDriver(this);
     }
 }
 

@@ -31,7 +31,7 @@ public class DriverMacro implements Job2dDriver, VisitableDriver {
     }
 
     @Override
-    public void accept(DriverVisitor visitor) {
-        visitor.visitDriverMacro(this);
+    public int accept(DriverVisitor visitor) {
+        return visitor.visitDriverMacro(this);
     }
 }

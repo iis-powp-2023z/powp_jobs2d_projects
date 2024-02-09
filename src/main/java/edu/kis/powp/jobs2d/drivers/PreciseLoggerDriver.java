@@ -34,7 +34,7 @@ public class PreciseLoggerDriver implements Job2dDriver, VisitableDriver {
     }
 
     @Override
-    public void accept(DriverVisitor visitor) {
-        visitor.visitPreciseLoggerDriver(this);
+    public int accept(DriverVisitor visitor) {
+        return visitor.visitPreciseLoggerDriver(this);
     }
 }

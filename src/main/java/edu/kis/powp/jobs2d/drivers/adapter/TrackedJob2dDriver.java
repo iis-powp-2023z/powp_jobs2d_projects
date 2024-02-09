@@ -42,7 +42,7 @@ public class TrackedJob2dDriver implements Job2dDriver, VisitableDriver {
     }
 
     @Override
-    public void accept(DriverVisitor visitor) {
-        visitor.visitTrackedJob2dDriver(this);
+    public int accept(DriverVisitor visitor) {
+        return visitor.visitTrackedJob2dDriver(this);
     }
 }

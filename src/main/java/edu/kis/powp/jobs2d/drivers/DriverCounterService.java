@@ -14,21 +14,22 @@ public class DriverCounterService {
         this.driverManager = driverManager;
     }
 
-    public Map<String, Integer> getCounts() {
+    public int getTotalDriverCount() {
+        int total = 0;
         DriverCounterVisitor counter = new DriverCounterVisitor();
-        counter.resetCounter();
         for (Job2dDriver driver : driverManager.getAllDrivers()) {
             if (driver instanceof VisitableDriver) {
-                ((VisitableDriver) driver).accept(counter);
+                total += ((VisitableDriver) driver).accept(counter);
             }
         }
-        return Collections.singletonMap("VisitDrivers", counter.getVisitDriversContainerCounter());
-        }
-        public void logDriverCounts(Logger logger) {
-            Map<String, Integer> counts = getCounts();
-            counts.forEach((type, count) -> logger.info(type + " count: " + count));
-        }
+        return total;
+    }
 
+    public void logDriverCounts(Logger logger) {
+        int total = getTotalDriverCount();
+        logger.info("Total Visitable Drivers count: " + total);
+    }
 }
+
 
 

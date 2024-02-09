@@ -4,5 +4,5 @@ import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.drivers.visitor.DriverVisitor;
 
 public interface VisitableDriver extends Job2dDriver {
-    void accept(DriverVisitor visitor);
+    int accept(DriverVisitor visitor);
 }

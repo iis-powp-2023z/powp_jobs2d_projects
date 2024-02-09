@@ -45,7 +45,7 @@ public class DriverContainer implements Job2dDriver, VisitableDriver {
     }
 
     @Override
-    public void accept(DriverVisitor visitor) {
-        visitor.visitDriverContainer(this);
+    public int accept(DriverVisitor visitor) {
+        return visitor.visitDriverContainer(this);
     }
 }

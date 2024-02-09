@@ -4,3 +4,17 @@
 /.project
 .settings
 .idea
+.DS_Store
+src/.DS_Store
+src/main/.DS_Store
+src/main/java/.DS_Store
+src/main/java/edu/.DS_Store
+src/main/java/edu/kis/.DS_Store
+src/main/java/edu/kis/powp/.DS_Store
+src/main/java/edu/kis/powp/jobs2d/.DS_Store
+src/main/java/edu/kis/powp/jobs2d/drivers/.DS_Store
+src/test/.DS_Store
+src/test/java/.DS_Store
+src/test/java/edu/.DS_Store
+src/test/java/edu/kis/.DS_Store
+src/test/java/edu/kis/powp/.DS_Store

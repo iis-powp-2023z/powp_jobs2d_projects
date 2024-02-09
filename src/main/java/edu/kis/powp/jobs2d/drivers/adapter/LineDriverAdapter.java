@@ -44,7 +44,7 @@ public class LineDriverAdapter implements Job2dDriver, VisitableDriver {
     }
 
     @Override
-    public void accept(DriverVisitor visitor) {
-        visitor.visitLineDriverAdapter(this);
+    public int accept(DriverVisitor visitor) {
+        return visitor.visitLineDriverAdapter(this);
     }
 }

@@ -9,90 +9,46 @@ import edu.kis.powp.jobs2d.drivers.adapter.TrackedJob2dDriver;
 import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 public class DriverCounterVisitor implements DriverVisitor {
 
-    private int visitDriversCounter = 0;
-
-
-    public int getVisitDriversContainerCounter() {
-        return visitDriversCounter;
-    }
-    public void resetCounter() {
-        this.visitDriversCounter = 0;
-    }
-
     @Override
-    public void visitDriverContainer(DriverContainer driverContainer) {
-        int innerDriversCounter = 0;
-
+    public int visitDriverContainer(DriverContainer driverContainer) {
+        int count = 1;
         for (Job2dDriver child : driverContainer.getChildren()) {
-            try {
-                Method acceptor = child.getClass().getMethod("accept", DriverVisitor.class);
-                int beforeInvocation = this.visitDriversCounter;
-
-                acceptor.invoke(child, this);
-
-                int afterInvocation = this.visitDriversCounter;
-                innerDriversCounter += (afterInvocation - beforeInvocation);
-            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                throw new RuntimeException(e);
+            if (child instanceof VisitableDriver) {
+                count += ((VisitableDriver) child).accept(this);
             }
         }
-
-        this.visitDriversCounter += innerDriversCounter + 1;
-    }
-
-
-
-
-    @Override
-    public void visitLineDriverAdapter(LineDriverAdapter lineDriverAdapter) {
-        visitDriversCounter = 1;
+        return count;
     }
 
     @Override
-    public void visitTrackedJob2dDriver(TrackedJob2dDriver trackedJob2dDriver) {
-        visitDriversCounter = 1;
+    public int visitLineDriverAdapter(LineDriverAdapter lineDriverAdapter) {
+        return 1;
     }
 
     @Override
-    public void visitDriverMacro(DriverMacro driverMacro) {
-        visitDriversCounter = 1;
-
+    public int visitTrackedJob2dDriver(TrackedJob2dDriver trackedJob2dDriver) {
+        return 1;
     }
 
     @Override
-    public void visitPreciseLoggerDriver(PreciseLoggerDriver preciseLoggerDriver) {
-        visitDriversCounter = 1;
+    public int visitDriverMacro(DriverMacro driverMacro) {
+        return 1;
     }
 
     @Override
-    public void visitTransformingDriver(TransformingDriver transformingDriver) {
-        int localCounter = 1;
+    public int visitPreciseLoggerDriver(PreciseLoggerDriver preciseLoggerDriver) {
+        return 1;
+    }
 
+    @Override
+    public int visitTransformingDriver(TransformingDriver transformingDriver) {
+        int count = 1;
         Job2dDriver childDriver = transformingDriver.getDriver();
         if (childDriver instanceof VisitableDriver) {
-            int beforeVisitingChild = this.visitDriversCounter;
-
-            ((VisitableDriver) childDriver).accept(this);
-
-            int afterVisitingChild = this.visitDriversCounter;
-            localCounter += (afterVisitingChild - beforeVisitingChild);
+            count += ((VisitableDriver) childDriver).accept(this);
         }
-
-        this.visitDriversCounter += localCounter;
-    }
-
-
-
-
-    @Override
-    public String toString() {
-        return "DriverCounters{" +
-                "visitDriversCounter=" + visitDriversCounter +
-                '}';
+        return count;
     }
 }
