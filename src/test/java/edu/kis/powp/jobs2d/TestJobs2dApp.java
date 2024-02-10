@@ -1,28 +1,29 @@
 package edu.kis.powp.jobs2d;
 
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.legacy.drawer.shape.LineFactory;
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindow;
 import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver;
 import edu.kis.powp.jobs2d.drivers.PreciseLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.drivers.adapter.TrackedJob2dDriver;
+import edu.kis.powp.jobs2d.drivers.composite.DriverContainer;
 import edu.kis.powp.jobs2d.events.*;
-import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
-import edu.kis.powp.jobs2d.features.MacroFeature;
-import edu.kis.powp.jobs2d.features.CommandsFeature;
-import edu.kis.powp.jobs2d.features.DrawerFeature;
-import edu.kis.powp.jobs2d.features.DriverFeature;
-import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.*;
 import edu.kis.powp.jobs2d.features.*;
+import edu.kis.powp.jobs2d.features.driverTransofrmation.TransformingDriver;
+import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.RotationModifier;
+import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ScalingModifier;
+import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ScalingModifierFactory;
+import edu.kis.powp.jobs2d.features.driverTransofrmation.modifiers.ShiftAxesModifier;
+import edu.kis.powp.jobs2d.gui.Extensions;
+import edu.kis.powp.jobs2d.gui.extensions.MacroListener;
+import edu.kis.powp.jobs2d.gui.extensions.ModifierListener;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TestJobs2dApp {
     private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
@@ -49,66 +50,50 @@ public class TestJobs2dApp {
      *
      * @param application Application context.
      */
-    private static void setupCommandTests(Application application) {
+    private static void setupCommandTests(Application application)
+    {
         application.addTest("Load secret command", new SelectLoadSecretCommandOptionListener());
         application.addTest("Load Triangle", new SelectTestTriangle2OptionListener());
-        application.addTest("Load Rectangle",  new SelectTestRectangle2OptionListener());
-        application.addTest("Load Cloned Rectangle",  new SelectTestClone2OptionListener());
+        application.addTest("Load Rectangle", new SelectTestRectangle2OptionListener());
+        application.addTest("Load Cloned Rectangle", new SelectTestClone2OptionListener());
 
         application.addTest("Run command", new SelectRunCurrentCommandOptionListener(DriverFeature.getDriverManager()));
-
         application.addTest("Load macro", new SelectMacro2OptionListener());
-
     }
 
     /**
      * Setup driver manager, and set default Job2dDriver for application.
      *
-     * @param application Application context.
+     * @param app Application context.
      */
-    private static void setupDrivers(Application application) {
+    private static void setupDrivers(Application app) {
 
-        Job2dDriver loggerDriver = new LoggerDriver();
-        DriverFeature.addDriver("Logger driver", loggerDriver);
+        // Driver Base for Line Simulator
+        Job2dDriver basicLineDriver = new LineDriverAdapter(DrawerFeature.getDrawerController(), LineFactory.getBasicLine(), "basic");
 
-        Job2dDriver preciousLoggerDriver = new PreciseLoggerDriver();
-        DriverFeature.addDriver("Precise logger driver", preciousLoggerDriver);
-        Job2dDriver driverContainer = new DriverContainer(
-                Arrays.asList(
-                        new PreciseLoggerDriver(),
-                        new LineDriverAdapter(DrawerFeature.getDrawerController(), LineFactory.getBasicLine(), "basic")
-                )
-        );
-        DriverFeature.addDriver("Precise Logger + Line Drawer", driverContainer);
+        // Driver Base for Special Line Simulator
+        LineDriverAdapter basicSpecialLineSimulator = new LineDriverAdapter(DrawerFeature.getDrawerController(), LineFactory.getSpecialLine(), "special");
 
-        IUsageMonitorStorage usageMonitorStorage = new UsageMonitorStorage();
-        IUsageMonitor usageMonitor = new UsageMonitor(usageMonitorStorage);
-        TrackedJob2dDriver trackedJob2dDriver = new TrackedJob2dDriver(loggerDriver, usageMonitor);
-        DriverFeature.addDriver("Tracked job 2d driver", trackedJob2dDriver);
+        // Transforming Driver for Line Simulator
+        TransformingDriver lineDriver = new TransformingDriver(basicLineDriver);
 
-        DrawPanelController drawerController = DrawerFeature.getDrawerController();
+        // Transforming Driver for Special Line Simulator
+        TransformingDriver specialLineDriver = new TransformingDriver(basicSpecialLineSimulator);
 
         // Driver for Line Simulator
-        Job2dDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
-        DriverFeature.addDriver("Line Simulator", driver);
-        DriverFeature.getDriverManager().setCurrentDriver(driver);
-
-        // Transformed Driver for Line Simulator - scaled to 25% and rotated by 70deg
-        TransformingDriver ScaledAndRotatedDriver = new TransformingDriver(driver);
-        ScaledAndRotatedDriver.addModifier(new ScalingModifier(0.25, 0.25));
-        ScaledAndRotatedDriver.addModifier(new RotationModifier(70));
-        DriverFeature.addDriver("Line Simulator  - scale: 1/4, rotation: 70deg", ScaledAndRotatedDriver);
+        DriverFeature.addDriver("Line Simulator", lineDriver);
+        DriverFeature.getDriverManager().setCurrentDriver(lineDriver);
 
         // Driver for Special Line Simulator
-        driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
-        DriverFeature.addDriver("Special line Simulator", driver);
+        DriverFeature.addDriver("Special Line Simulator", specialLineDriver);
 
-        // Transformed Driver for Special Line Simulator - flipped in both planes and shifted axes: X(50) Y(-50)
-        TransformingDriver FlippedAndShiftedDriver = new TransformingDriver(driver);
-        FlippedAndShiftedDriver.addModifier(ScalingModifierFactory.createHorizontalFlipModifier());
-        FlippedAndShiftedDriver.addModifier(ScalingModifierFactory.createVerticalFlipModifier());
-        FlippedAndShiftedDriver.addModifier(new ShiftAxesModifier(50, -50));
-        DriverFeature.addDriver("Special Line Simulator  - flipped X and Y, shifted X and Y", FlippedAndShiftedDriver);
+        // Add modifiers to the extensions
+        Extensions.addMenuElementWithCheckbox(app, "Scale: 1/4", new ModifierListener(new ScalingModifier(0.25, 0.25), lineDriver, specialLineDriver));
+        Extensions.addMenuElementWithCheckbox(app, "Rotation: 70deg", new ModifierListener(new RotationModifier(70), lineDriver, specialLineDriver));
+        Extensions.addMenuElementWithCheckbox(app, "Horizontal flip", new ModifierListener(ScalingModifierFactory.createHorizontalFlipModifier(), lineDriver, specialLineDriver));
+        Extensions.addMenuElementWithCheckbox(app, "Vertical flip", new ModifierListener(ScalingModifierFactory.createVerticalFlipModifier(), lineDriver, specialLineDriver));
+        Extensions.addMenuElementWithCheckbox(app, "Shifted X and Y", new ModifierListener(new ShiftAxesModifier(50, -50), lineDriver, specialLineDriver));
+        Extensions.addMenuElementWithCheckbox(app, "Macro", new MacroListener(DriverFeature.getDriverManager()));
 
         DriverFeature.updateDriverInfo();
     }
@@ -133,6 +118,27 @@ public class TestJobs2dApp {
      */
     private static void setupLogger(Application application) {
 
+        LoggerDriver loggerDriver = new LoggerDriver();
+        TrackedJob2dDriver trackedJob2dDriver;
+        Job2dDriver preciseLoggerDriver, loggerAndDrawerContainer;
+
+        // Create a TrackedJob2dDriver instance
+        IUsageMonitorStorage usageMonitorStorage = new UsageMonitorStorage();
+        IUsageMonitor usageMonitor = new UsageMonitor(usageMonitorStorage);
+        trackedJob2dDriver = new TrackedJob2dDriver(loggerDriver, usageMonitor);
+
+        // Create a Precise Logger instance
+        preciseLoggerDriver = new PreciseLoggerDriver();
+
+        // Create a container for Precise Logger combined with Line Drawer
+        loggerAndDrawerContainer = new DriverContainer(
+                Arrays.asList
+                        (
+                                preciseLoggerDriver,
+                                new LineDriverAdapter(DrawerFeature.getDrawerController(), LineFactory.getBasicLine(), "basic")
+                        )
+        );
+
         application.addComponentMenu(Logger.class, "Logger", 0);
         application.addComponentMenuElement(Logger.class, "Clear log",
                 (ActionEvent e) -> application.flushLoggerOutput());
@@ -143,6 +149,12 @@ public class TestJobs2dApp {
         application.addComponentMenuElement(Logger.class, "Severe level",
                 (ActionEvent e) -> logger.setLevel(Level.SEVERE));
         application.addComponentMenuElement(Logger.class, "OFF logging", (ActionEvent e) -> logger.setLevel(Level.OFF));
+
+        // Add loggers to the extensions
+        Extensions.addExtendingDriver(application, "Logger", loggerDriver);
+        Extensions.addExtendingDriver(application, "Tracked Job 2D",  trackedJob2dDriver);
+        Extensions.addExtendingDriver(application, "Precise Logger",  preciseLoggerDriver);
+        Extensions.addExtendingDriver(application, "Precise Logger + Line Drawer", loggerAndDrawerContainer);
     }
 
     /**
@@ -154,6 +166,7 @@ public class TestJobs2dApp {
                 Application app = new Application("Jobs 2D");
                 DrawerFeature.setupDrawerPlugin(app);
                 CommandsFeature.setupCommandManager();
+                Extensions.setupExtensions(app);
 
                 MacroFeature.setupMacro(app);
                 DriverFeature.setupDriverPlugin(app);
