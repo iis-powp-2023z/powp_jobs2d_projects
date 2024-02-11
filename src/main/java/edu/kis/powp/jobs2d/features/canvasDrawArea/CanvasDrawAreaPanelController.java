@@ -5,54 +5,47 @@ import java.awt.*;
 
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.command.gui.SetCustomCanvasDrawAreaWindow;
-import edu.kis.powp.jobs2d.events.SelectCanvasA4SizeOptionListener;
-import edu.kis.powp.jobs2d.events.SelectCanvasB5SizeOptionListener;
-import edu.kis.powp.jobs2d.events.SelectCanvasCustomSizeOptionListener;
+import edu.kis.powp.jobs2d.events.SelectCanvasOptionListener;
 import edu.kis.powp.jobs2d.features.DrawerFeature;
 
 public class CanvasDrawAreaPanelController {
     private static final Integer DRAW_AREA_BORDER = 50;
     private final JPanel backgroundArea;
     private JPanel canvasDrawArea;
+    private final CanvasSizeProvider sizeProvider;
 
-    public CanvasDrawAreaPanelController(Application application) {
+    public CanvasDrawAreaPanelController(Application application, CanvasSizeProvider sizeProvider) {
+        this.sizeProvider = sizeProvider;
         this.setActionListenersAndComponentMenu(application);
         backgroundArea = application.getFreePanel();
         this.initializeCanvasDrawArea();
         this.setDefaultBackgroundColor();
-        this.setPredefinedSize(CanvasDimension.CanvasSizes.A4);
+        this.setPredefinedSize(CanvasSizeFactory.getCanvasSize("A4"));
     }
 
-    public void setPredefinedSize(CanvasDimension.CanvasSizes size) {
-        CanvasDimension.createDimensions(CanvasDimension.getDimensions(size));
-        this.setDimensions(CanvasDimension.getScaledCurrentDimensions());
+     public void setPredefinedSize(CanvasSize canvasSize) {
+            sizeProvider.setCurrentDimension(canvasSize.getDimension());
+            this.setDimensions(sizeProvider.getCurrentDimension());
     }
 
     public void setCustomSize(Dimension newDimensions) {
-        CanvasDimension.createDimensions(newDimensions);
-        this.setDimensions(CanvasDimension.getScaledCurrentDimensions());
+        sizeProvider.setCurrentDimension(newDimensions);
+        this.setDimensions(sizeProvider.getCurrentDimension());
     }
 
     public void openCustomSizeWindow() {
         SetCustomCanvasDrawAreaWindow setCustomCanvasDrawAreaWindow = new SetCustomCanvasDrawAreaWindow();
     }
 
-    public Dimension getCavasDimension() {
-        return CanvasDimension.getCurrentDimensions();
+    public Dimension getCanvasDimension() {
+        return sizeProvider.getCurrentDimension();
     }
 
     private void setActionListenersAndComponentMenu(Application application) {
-        SelectCanvasA4SizeOptionListener selectCanvasA4SizeOptionListener = new SelectCanvasA4SizeOptionListener();
-        SelectCanvasB5SizeOptionListener selectCanvasB5SizeOptionListener = new SelectCanvasB5SizeOptionListener();
-        SelectCanvasCustomSizeOptionListener selectCanvasCustomSizeOptionListener = new SelectCanvasCustomSizeOptionListener();
-
         application.addComponentMenu(CanvasDrawAreaPanelController.class, "Format", 0);
-        application.addComponentMenuElement(CanvasDrawAreaPanelController.class, "A4",
-                selectCanvasA4SizeOptionListener);
-        application.addComponentMenuElement(CanvasDrawAreaPanelController.class, "B5",
-                selectCanvasB5SizeOptionListener);
+        CanvasSizeFactory.getSizes().forEach((label, size) -> application.addComponentMenuElement(CanvasDrawAreaPanelController.class, label, e -> setPredefinedSize(size)));
         application.addComponentMenuElement(CanvasDrawAreaPanelController.class, "Custom size",
-                selectCanvasCustomSizeOptionListener);
+                new SelectCanvasOptionListener());
     }
 
     private void initializeCanvasDrawArea() {

@@ -1,6 +1,7 @@
 package edu.kis.powp.jobs2d.command.gui;
 
 import edu.kis.powp.jobs2d.features.DrawerFeature;
+import edu.kis.powp.jobs2d.features.canvasDrawArea.CanvasSizeFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,10 @@ public class SetCustomCanvasDrawAreaWindow extends JFrame {
         widthTextField = new JTextField(10);
         heightTextField = new JTextField(10);
 
-        Dimension customDimensions = DrawerFeature.getCanvasDrawAreaPanelController().getCavasDimension();
+        Dimension customDimensions = DrawerFeature.getCanvasDrawAreaPanelController().getCanvasDimension();
+        if (customDimensions == null) {
+            customDimensions = CanvasSizeFactory.getDefaultCanvasSize().getDimension();
+        }
         widthTextField.setText(Integer.toString((int) customDimensions.getWidth()));
         heightTextField.setText(Integer.toString((int) customDimensions.getHeight()));
 

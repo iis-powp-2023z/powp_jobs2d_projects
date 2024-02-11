@@ -6,9 +6,9 @@ import edu.kis.legacy.drawer.panel.DrawPanelController;
 import edu.kis.powp.jobs2d.features.canvasDrawArea.*;
 
 public class DrawerFeature {
-
     private static DrawPanelController drawerController;
     private static CanvasDrawAreaPanelController canvasDrawAreaPanelController;
+    private static final CanvasSizeProvider canvasSizeProvider = new DefaultCanvasSizeProvider();
 
     /**
      * Setup Drawer Plugin and add to application.
@@ -22,7 +22,7 @@ public class DrawerFeature {
         application.addComponentMenu(DrawPanelController.class, "Draw Panel", 0);
         application.addComponentMenuElement(DrawPanelController.class, "Clear Panel", selectClearPanelOptionListener);
 
-        canvasDrawAreaPanelController = new CanvasDrawAreaPanelController(application);
+        canvasDrawAreaPanelController = new CanvasDrawAreaPanelController(application, canvasSizeProvider);
     }
 
     /**
