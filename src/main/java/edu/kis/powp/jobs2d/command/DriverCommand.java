@@ -18,4 +18,12 @@ public interface DriverCommand {
     public DriverCommand clone();
 
     public void accept(CommandVisitor commandVisitor);
+
+    public default int getPosX() {
+        return 0;
+    }
+
+    public default int getPosY() {
+        return 0;
+    }
 }
