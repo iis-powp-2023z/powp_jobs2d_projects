@@ -37,12 +37,10 @@ public class OperateToCommand implements DriverCommand {
         commandVisitor.visitOperateToCommand(this);
     }
 
-    @Override
     public int getPosX() {
         return posX;
     }
 
-    @Override
     public int getPosY() {
         return posY;
     }

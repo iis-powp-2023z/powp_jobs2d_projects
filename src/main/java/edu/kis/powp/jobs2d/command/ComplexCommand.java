@@ -1,18 +1,14 @@
 package edu.kis.powp.jobs2d.command;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
-import edu.kis.powp.jobs2d.command.visitor.CanvasBoundaryCheckVisitor;
 import edu.kis.powp.jobs2d.command.visitor.CommandVisitor;
-import edu.kis.powp.jobs2d.features.DrawerFeature;
+import edu.kis.powp.jobs2d.drivers.BoundaryCheckJob2dDriver;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ComplexCommand implements ICompoundCommand {
-    private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private List<DriverCommand> listOfCommands;
     private String name;
 
@@ -23,16 +19,9 @@ public class ComplexCommand implements ICompoundCommand {
 
     @Override
     public void execute(Job2dDriver driver) {
-        Dimension canvasDimension = DrawerFeature.getCanvasDrawAreaPanelController().getCanvasDimension();
-        CanvasBoundaryCheckVisitor boundaryCheckVisitor = new CanvasBoundaryCheckVisitor(canvasDimension);
-        this.accept(boundaryCheckVisitor);
-
-        if (boundaryCheckVisitor.doesExceedCanvas()) {
-            logger.warning("Drawing exceeds boundaries of canvas");
-            return;
-        }
-
-        this.iterator().forEachRemaining(command -> command.execute(driver));
+        BoundaryCheckJob2dDriver boundaryCheckJob2dDriver = new BoundaryCheckJob2dDriver(driver);
+        this.accept(boundaryCheckJob2dDriver.boundaryCheckVisitor);
+        this.iterator().forEachRemaining(command -> command.execute(boundaryCheckJob2dDriver));
     }
 
     @Override
