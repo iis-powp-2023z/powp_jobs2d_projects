@@ -48,5 +48,4 @@ public class CanvasBoundaryCheckVisitor implements CommandVisitor {
         }
         return false;
     }
-
 }

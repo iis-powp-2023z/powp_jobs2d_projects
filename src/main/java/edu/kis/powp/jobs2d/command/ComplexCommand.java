@@ -2,7 +2,6 @@ package edu.kis.powp.jobs2d.command;
 
 import edu.kis.powp.jobs2d.Job2dDriver;
 import edu.kis.powp.jobs2d.command.visitor.CommandVisitor;
-import edu.kis.powp.jobs2d.drivers.BoundaryCheckJob2dDriver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,9 +18,7 @@ public class ComplexCommand implements ICompoundCommand {
 
     @Override
     public void execute(Job2dDriver driver) {
-        BoundaryCheckJob2dDriver boundaryCheckJob2dDriver = new BoundaryCheckJob2dDriver(driver);
-        this.accept(boundaryCheckJob2dDriver.boundaryCheckVisitor);
-        this.iterator().forEachRemaining(command -> command.execute(boundaryCheckJob2dDriver));
+        this.iterator().forEachRemaining(command -> command.execute(driver));
     }
 
     @Override
