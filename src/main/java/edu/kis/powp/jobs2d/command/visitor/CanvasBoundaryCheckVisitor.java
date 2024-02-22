@@ -7,25 +7,34 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 public class CanvasBoundaryCheckVisitor implements CommandVisitor {
-    private int minX = Integer.MAX_VALUE;
-    private int maxX = Integer.MIN_VALUE;
-    private int minY = Integer.MAX_VALUE;
-    private int maxY = Integer.MIN_VALUE;
-
     private final Dimension canvasDimension;
+
+    private boolean boundaryExceeded = false;
 
     public CanvasBoundaryCheckVisitor(Dimension canvasDimension) {
         this.canvasDimension = canvasDimension;
     }
 
+    public void resetBoundaryCheck() {
+        boundaryExceeded = false;
+    }
+
+    public boolean getBoundaryExceed() {
+        return boundaryExceeded;
+    }
+
     @Override
     public void visitOperateToCommand(OperateToCommand operateToCommand) {
-        updateDrawingBoundaryLimits(operateToCommand.getPosX(), operateToCommand.getPosY());
+        if(exceedsBounds(operateToCommand.getPosX(), operateToCommand.getPosY())) {
+            boundaryExceeded = true;
+        }
     }
 
     @Override
     public void visitSetPositionCommand(SetPositionCommand setPositionCommand) {
-        updateDrawingBoundaryLimits(setPositionCommand.getPosX(), setPositionCommand.getPosY());
+        if(exceedsBounds(setPositionCommand.getPosX(), setPositionCommand.getPosY())) {
+            boundaryExceeded = true;
+        }
     }
 
     @Override
@@ -33,19 +42,9 @@ public class CanvasBoundaryCheckVisitor implements CommandVisitor {
         complexCommand.iterator().forEachRemaining(command -> command.accept(this));
     }
 
-    private void updateDrawingBoundaryLimits(int x, int y) {
-        minX = Math.min(minX, x);
-        maxX = Math.max(maxX, x);
-        minY = Math.min(minY, y);
-        maxY = Math.max(maxY, y);
-    }
-
-    public boolean exceedsBounds() {
+    public boolean exceedsBounds(int x, int y) {
         Point topLeft = new Point(-canvasDimension.width / 2, -canvasDimension.height / 2);
         Point bottomRight = new Point(canvasDimension.width / 2, canvasDimension.height / 2);
-        if(minX < topLeft.x || maxX > bottomRight.x || minY < topLeft.y || maxY > bottomRight.y) {
-            return true;
-        }
-        return false;
+        return x < topLeft.x || x > bottomRight.x || y < topLeft.y || y > bottomRight.y;
     }
 }

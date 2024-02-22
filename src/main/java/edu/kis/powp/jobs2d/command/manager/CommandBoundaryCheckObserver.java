@@ -1,10 +1,11 @@
 package edu.kis.powp.jobs2d.command.manager;
 
-import edu.kis.powp.jobs2d.Job2dDriver;
-import edu.kis.powp.jobs2d.drivers.BoundaryCheckJob2dDriver;
-import edu.kis.powp.jobs2d.features.DriverFeature;
+import edu.kis.powp.jobs2d.command.DriverCommand;
+import edu.kis.powp.jobs2d.command.visitor.CanvasBoundaryCheckVisitor;
+import edu.kis.powp.jobs2d.features.DrawerFeature;
 import edu.kis.powp.observer.Subscriber;
 
+import java.awt.Dimension;
 import java.util.logging.Logger;
 
 public class CommandBoundaryCheckObserver implements Subscriber {
@@ -19,11 +20,14 @@ public class CommandBoundaryCheckObserver implements Subscriber {
 
     @Override
     public void update() {
-        Job2dDriver currentDriver = DriverFeature.getDriverManager().getCurrentDriver();
-        BoundaryCheckJob2dDriver boundaryCheckDriver = new BoundaryCheckJob2dDriver(currentDriver);
-        commandManager.getCurrentCommand().execute(boundaryCheckDriver);
+        Dimension canvasDimension = DrawerFeature.getCanvasDrawAreaPanelController().getCanvasDimension();
+        CanvasBoundaryCheckVisitor boundaryCheckVisitor = new CanvasBoundaryCheckVisitor(canvasDimension);
 
-        if (boundaryCheckDriver.doesExceedCanvas()) {
+        DriverCommand currentCommand = commandManager.getCurrentCommand();
+        boundaryCheckVisitor.resetBoundaryCheck();
+        currentCommand.accept(boundaryCheckVisitor);
+
+        if (boundaryCheckVisitor.getBoundaryExceed()) {
             logger.warning("Operation exceeds boundaries of canvas");
         }
     }
